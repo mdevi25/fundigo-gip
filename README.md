@@ -1,7 +1,7 @@
 # Fundigo — AI-Powered Grant Intelligence for Nonprofits
 
-> **AI Launchpad Hackathon · July 2026**
-> Built by Madhu Devi · [github.com/mdevi25/grant-discovery](https://github.com/mdevi25/grant-discovery)
+> Built July 2026 · by Madhu Devi
+> [github.com/mdevi25/fundigo-gip](https://github.com/mdevi25/fundigo-gip)
 
 **Find the grants your mission deserves.**
 
@@ -19,7 +19,7 @@ Fundigo solves this with one free Groq API key, a Google account, and 30 minutes
 
 ## Live Site
 
-**[mdevi25.github.io/grant-discovery](https://mdevi25.github.io/grant-discovery/)**
+**[mdevi25.github.io/fundigo-gip](https://mdevi25.github.io/fundigo-gip/)**
 
 Sign in with Google to use it. Grant data lives in your own org's Google Sheet inside a Shared Drive your organization owns — never on any third-party server.
 
@@ -142,7 +142,7 @@ This repository is public for demonstration purposes. Public visibility does not
 
 ---
 
-*Built for AI Launchpad Hackathon · July 2026 · by Madhu Devi*
+*Built July 2026 · by Madhu Devi*
 
 ---
 

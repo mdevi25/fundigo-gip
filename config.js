@@ -5,7 +5,7 @@
  *
  * Organization: Educate. Radiate. Elevate. (ERE)
  * Demo org:     BrightPath Learning Foundation (BLF)
- * Repo:         github.com/mdevi25/grant-discovery
+ * Repo:         github.com/mdevi25/fundigo-gip
  * Cost:         $0.00 — one Groq API key covers all layers
  *
  * ── ARCHITECTURE (5 layers, 1 key) ──────────────────────────
@@ -427,13 +427,12 @@ const CONFIG = {
   },
 
   // ============================================================
-  // HACKATHON META
+  // BUILD META
   // ============================================================
   meta: {
     version:             "2.0.0",
     buildDate:           "2026-07-08",
-    hackathonDeadline:   "2026-07-10",
-    repo:                "https://github.com/mdevi25/grant-discovery",
+    repo:                "https://github.com/mdevi25/fundigo-gip",
     totalCost:           "$0.00",
     apiKeysRequired:     1,
     apiProvider:         "Groq",

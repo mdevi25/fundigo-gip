@@ -1,5 +1,5 @@
 {
-  "name": "fundigo-grant-discovery",
+  "name": "fundigo-gip",
   "version": "2.0.0",
   "private": true,
   "description": "Fundigo — AI-powered grant intelligence for nonprofits. Static site + Netlify Functions.",
