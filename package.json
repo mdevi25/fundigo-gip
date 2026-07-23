@@ -1,0 +1,9 @@
+{
+  "name": "fundigo-grant-discovery",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Fundigo — AI-powered grant intelligence for nonprofits. Static site + Netlify Functions.",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

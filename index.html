@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundigo — AI-Powered Grant Discovery</title>
+  <meta name="description" content="AI-powered grant intelligence for nonprofits. 5-layer pipeline. Verified leads. Human in control.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root{
+      --c-bg:#F8F7FF;
+      --c-border:#DDD8F0;
+      --c-purple:#7C3AED;
+      --c-deep:#5B21B6;
+      --c-tint:#F5F3FF;
+      --c-soft:#EDE9FE;
+      --c-text:#1E1B2E;
+      --c-muted:#6B7280;
+      --c-faint:#9CA3AF;
+      --fs-base:13px;
+      --fs-sm:12px;
+      --fs-xs:11px;
+      --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body{scroll-behavior:smooth;margin:0;padding:0;overflow-x:hidden;height:100%;}
+    body{font-family:var(--font-sans);background:var(--c-bg);color:var(--c-text);font-size:var(--fs-base);line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+    /* ── VIEW ROUTING ── */
+    #view-landing{display:block;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;}
+    #view-app{display:none;}
+    body.in-app #view-landing{display:none;}
+    body.in-app #view-app{display:block;}
+    .tab-section{display:none;}
+    .tab-section.tab-active{display:block;}
+
+    /* ── LANDING NAV ── */
+    .landing-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:var(--c-bg);border-bottom:0.5px solid var(--c-border);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px;}
+    .landing-nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+    .landing-nav-name{font-size:16px;font-weight:600;color:var(--c-text);letter-spacing:-.02em;}
+    .landing-nav-name span{color:var(--c-purple);}
+    .landing-nav-links{display:flex;align-items:center;gap:20px;}
+    .landing-nav-links a{font-size:12.5px;color:var(--c-muted);text-decoration:none;font-weight:500;transition:color .15s;}
+    .landing-nav-links a:hover{color:var(--c-purple);}
+    .landing-nav-cta{background:var(--c-purple);color:#fff;border:1px solid var(--c-purple);border-radius:8px;padding:8px 20px;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .15s;}
+    .landing-nav-cta:hover{background:var(--c-deep);border-color:var(--c-deep);}
+
+    /* ── HERO ── */
+    .hero{position:relative;min-height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 32px 20px;overflow:hidden;}
+    #network-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.35;}
+    .hero-content{position:relative;z-index:2;max-width:580px;}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--c-soft);color:var(--c-deep);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:20px;letter-spacing:.04em;text-transform:uppercase;}
+    .hero-title{font-size:36px;font-weight:500;color:var(--c-text);line-height:1.2;margin-bottom:16px;letter-spacing:-.02em;}
+    .hero-title b{color:var(--c-purple);font-weight:600;}
+    .hero-sub{font-size:14px;color:var(--c-muted);line-height:1.65;max-width:460px;margin:0 auto 32px;}
+    .start-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--c-purple),#A855F7);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:-.01em;box-shadow:0 4px 20px rgba(124,58,237,.35);transition:transform .15s,box-shadow .15s;}
+    .start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.45);}
+    .start-btn-arrow{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;}
+    .hero-note{margin-top:14px;font-size:11.5px;color:var(--c-faint);}
+    .hero-note span{color:var(--c-purple);font-weight:600;}
+
+    /* ── STATS STRIP ── */
+    .stats-strip{display:flex;justify-content:center;border-top:0.5px solid var(--c-border);border-bottom:0.5px solid var(--c-border);background:#fff;}
+    .stats-strip-item{flex:1;max-width:200px;text-align:center;padding:12px 16px;border-right:0.5px solid var(--c-border);}
+    .stats-strip-item:last-child{border-right:none;}
+    .stats-strip-n{font-size:20px;font-weight:500;color:var(--c-deep);}
+    .stats-strip-l{font-size:11px;color:var(--c-muted);margin-top:2px;line-height:1.4;}
+
+    /* ── FEATURES ── */
+    .features-section{padding:48px 32px;max-width:900px;margin:0 auto;}
+    .features-title{text-align:center;font-size:20px;font-weight:500;color:var(--c-text);margin-bottom:6px;}
+    .features-sub{text-align:center;font-size:13px;color:var(--c-muted);margin-bottom:32px;}
+    .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .feature-card{background:#fff;border:0.5px solid var(--c-border);border-radius:14px;padding:20px;}
+    .feature-card-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+    .feature-card-title{font-size:13.5px;font-weight:600;color:var(--c-text);margin-bottom:5px;}
+    .feature-card-desc{font-size:12px;color:var(--c-muted);line-height:1.55;}
+
+    /* ── HOW IT WORKS ── */
+    .how-section{padding:0 32px 0;max-width:900px;margin:0 auto;}
+    .how-title{text-align:center;font-size:20px;font-weight:500;color:var(--c-text);margin-bottom:4px;}
+    .how-sub{text-align:center;font-size:13px;color:var(--c-muted);margin-bottom:16px;}
+    .how-steps{display:flex;align-items:flex-start;justify-content:center;}
+    .how-step{flex:1;text-align:center;padding:0 10px;position:relative;}
+    .how-step:not(:last-child)::after{content:"→";position:absolute;right:-8px;top:18px;color:var(--c-border);font-size:18px;}
+    .how-step-num{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--c-purple),#A855F7);color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+    .how-step-title{font-size:12.5px;font-weight:600;color:var(--c-text);margin-bottom:3px;}
+    .how-step-desc{font-size:11px;color:var(--c-muted);line-height:1.5;}
+
+    /* ── LANDING FOOTER ── */
+    .landing-footer{background:var(--c-text);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:auto;}
+    .landing-footer-logo{display:flex;align-items:center;gap:8px;}
+    .landing-footer-name{font-size:14px;font-weight:600;color:#fff;}
+    .landing-footer-name span{color:#A78BFA;}
+    .landing-footer-links{display:flex;gap:16px;flex-wrap:wrap;row-gap:6px;}
+    .landing-footer-links a{font-size:11.5px;color:#6B7280;text-decoration:none;}
+    .landing-footer-links a:hover{color:#A78BFA;}
+    .landing-footer-badge{font-size:10px;font-weight:700;background:#1A3A2A;color:#86EFAC;border:1px solid #166634;padding:3px 9px;border-radius:20px;}
+
+    /* ── APP SHELL ── */
+    .app-shell{min-height:100vh;display:flex;flex-direction:column;}
+    .app-footer{background:var(--c-text);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:auto;}
+    .app-footer-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+    .app-footer-name{font-size:13px;font-weight:600;color:#fff;}
+    .app-footer-name span{color:#A78BFA;}
+    .app-footer-links{display:flex;gap:16px;}
+    .app-footer-links a{font-size:11.5px;color:#6B7280;text-decoration:none;}
+    .app-footer-links a:hover{color:#A78BFA;}
+    .app-footer-badge{font-size:10px;font-weight:700;background:#1A3A2A;color:#86EFAC;border:1px solid #166534;padding:3px 9px;border-radius:20px;}
+    .app-hdr{background:var(--c-bg);border-bottom:0.5px solid var(--c-border);position:sticky;top:0;z-index:100;}
+    .app-hdr-stripe{height:4px;background:linear-gradient(90deg,var(--c-purple),#A855F7);}
+    .app-hdr-body{padding:12px 20px 0;}
+    .app-hdr-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+    .app-hdr-title{font-size:15px;font-weight:600;color:var(--c-text);letter-spacing:-.015em;}
+    .app-hdr-title span{color:var(--c-purple);}
+    .app-hdr-sub{font-size:11px;color:var(--c-muted);margin-top:1px;}
+    .app-hdr-badge{font-size:10px;font-weight:700;background:#F0FDF4;color:#166534;border:1px solid #86EFAC;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+    .app-tabs{display:flex;gap:0;border-bottom:1.5px solid var(--c-border);}
+    .app-tab{background:none;border:none;color:var(--c-muted);font-size:12px;font-weight:600;padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent;position:relative;top:1.5px;font-family:var(--font-sans);}
+    .app-tab:hover{color:var(--c-text);}
+    .app-tab.tab-active{color:var(--c-text);border-bottom-color:var(--c-purple);}
+    .tab-badge{background:var(--c-purple);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;margin-left:3px;}
+    .app-content{padding:16px 20px 24px;flex:1;}
+
+    /* ── DISCOVER TAB ── */
+    .search-panel{background:#fff;border:0.5px solid var(--c-border);border-radius:12px;padding:16px;margin-bottom:14px;}
+    .search-panel.search-panel-collapsed > *{display:none;}
+    .search-panel-summary{display:none;align-items:center;justify-content:space-between;gap:10px;}
+    .search-panel.search-panel-collapsed .search-panel-summary{display:flex;}
+    .search-panel-summary-text{font-size:13px;color:var(--c-muted);display:flex;align-items:center;gap:6px;}
+    .search-panel-change-btn{font-size:12px;color:var(--c-purple);background:none;border:none;cursor:pointer;font-weight:600;padding:0;}
+    .search-panel-change-btn:hover{text-decoration:underline;}
+    .search-panel h2{font-size:14px;font-weight:500;margin-bottom:3px;}
+    .search-panel-desc{font-size:11.5px;color:var(--c-muted);margin-bottom:12px;line-height:1.5;}
+    .chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+    .chip{display:flex;align-items:center;gap:8px;padding:9px 11px;border:0.5px solid var(--c-border);border-radius:10px;cursor:pointer;background:var(--c-bg);transition:all .15s;text-align:left;}
+    .chip:hover,.chip.chip-selected{border-color:var(--c-purple);background:var(--c-tint);}
+    .chip.chip-full{grid-column:1/-1;border-color:var(--c-purple);background:var(--c-tint);}
+    .chip-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .chip-label{font-size:12px;font-weight:600;color:var(--c-text);display:block;line-height:1.2;}
+    .chip-desc{font-size:10px;color:var(--c-muted);display:block;margin-top:2px;}
+    .custom-search-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-muted);margin-bottom:5px;display:block;}
+    .custom-search-row{display:flex;gap:8px;align-items:flex-end;}
+    .custom-search-input-wrap{flex:1;position:relative;}
+    .custom-search-input{width:100%;border:0.5px solid var(--c-border);border-radius:8px;padding:8px 52px 8px 10px;font-size:12.5px;color:var(--c-text);background:#fff;resize:none;min-height:38px;font-family:var(--font-sans);}
+    .custom-search-input:focus{outline:none;border-color:var(--c-purple);}
+    .char-counter{position:absolute;right:8px;bottom:8px;font-size:9px;color:var(--c-faint);}
+    .char-counter.warn{color:#EF4444;}
+    .run-btn{display:flex;align-items:center;gap:6px;background:var(--c-purple);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:var(--font-sans);}
+    .run-btn:hover{background:var(--c-deep);}
+    .run-btn:disabled{background:#C4B5FD;cursor:not-allowed;}
+    .search-hint{font-size:10.5px;color:var(--c-faint);margin-top:5px;}
+    .pipeline-bar{display:flex;align-items:center;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
+    .pipeline-step{display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:6px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;border:0.5px solid var(--c-border);background:var(--c-bg);color:var(--c-muted);}
+    .pipeline-step.step-done{background:var(--c-soft);border-color:var(--c-purple);color:var(--c-deep);}
+    .pipeline-step.step-running{background:#FEF3C7;border-color:#F59E0B;color:#92400E;animation:pulse 1.5s ease-in-out infinite;}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+    .pipeline-arrow{width:16px;text-align:center;color:var(--c-border);font-size:10px;flex-shrink:0;}
+    .summary-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px;}
+    .summary-stat{background:#fff;border:0.5px solid var(--c-border);border-radius:8px;padding:10px 12px;}
+    .summary-stat-n{font-size:20px;font-weight:500;color:var(--c-deep);}
+    .summary-stat-l{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--c-muted);margin-top:2px;}
+    .top-recs{background:var(--c-tint);border:0.5px solid var(--c-border);border-left:3px solid var(--c-purple);border-radius:0 10px 10px 0;padding:11px 13px;margin-bottom:14px;}
+    .top-recs-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-deep);margin-bottom:5px;}
+    .top-rec-row{font-size:12px;color:#374151;padding:2px 0;line-height:1.5;}
+    .opp-card{background:#fff;border:0.5px solid var(--c-border);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:box-shadow .15s;}
+    .opp-card:hover{box-shadow:0 2px 12px rgba(124,58,237,.1);}
+    .opp-card.opp-flagged{border-left:3px solid #F59E0B;background:#FFFBEB;}
+    .opp-card-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none;}
+    .opp-card-header:hover{background:var(--c-tint);}
+    .opp-card-name{font-size:14px;font-weight:500;color:var(--c-text);line-height:1.2;}
+    .opp-card-prog{font-size:10.5px;color:var(--c-muted);margin-top:1px;}
+    .opp-card-pills{display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0;}
+    .opp-card-summary{display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex-shrink:0;}
+    .sum-k{font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:var(--c-faint);display:block;margin-bottom:1px;}
+    .sum-v{font-size:11.5px;font-weight:600;color:var(--c-text);}
+    .opp-chevron{color:var(--c-faint);font-size:14px;transition:transform .2s;flex-shrink:0;margin-left:auto;}
+    .opp-card.opp-open .opp-chevron{transform:rotate(180deg);}
+    .opp-card-body{display:none;padding:0 14px 12px;border-top:0.5px solid var(--c-border);}
+    .opp-card.opp-open .opp-card-body{display:block;}
+    .opp-why{font-size:11.5px;line-height:1.55;color:#374151;background:var(--c-tint);border-radius:6px;padding:8px 10px;margin:10px 0 8px;}
+    .opp-guard-flag{font-size:11px;background:#FEF3C7;border-left:2px solid #F59E0B;padding:7px 10px;border-radius:0 5px 5px 0;margin-bottom:8px;color:#92400E;line-height:1.5;}
+    .opp-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+    .opp-link{font-size:11px;color:var(--c-purple);font-weight:600;text-decoration:none;}
+    .opp-link:hover{text-decoration:underline;}
+    .add-to-tracker-btn{display:flex;align-items:center;gap:4px;background:var(--c-purple);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-sans);}
+    .add-to-tracker-btn:hover{background:var(--c-deep);}
+    .verified-note{font-size:10px;color:var(--c-faint);}
+    .opp-ctrl-row{display:flex;gap:8px;margin-bottom:10px;}
+    .opp-ctrl-btn{background:none;border:0.5px solid var(--c-border);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--c-muted);cursor:pointer;font-family:var(--font-sans);}
+    .opp-ctrl-btn:hover{background:var(--c-tint);color:var(--c-purple);}
+    .future-box{background:var(--c-tint);border:0.5px solid var(--c-border);border-radius:10px;overflow:hidden;margin-top:4px;}
+    .future-header{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;user-select:none;}
+    .future-header:hover{background:#EDEAF8;}
+    .future-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--c-muted);flex:1;}
+    .future-count{font-size:10px;font-weight:700;background:var(--c-soft);color:var(--c-deep);padding:2px 8px;border-radius:20px;}
+    .future-chevron{color:var(--c-muted);font-size:16px;transition:transform .2s;flex-shrink:0;}
+    .future-box.future-open .future-chevron{transform:rotate(180deg);}
+    .future-body{display:none;border-top:0.5px solid var(--c-border);}
+    .future-box.future-open .future-body{display:block;}
+    .future-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 14px;border-bottom:0.5px solid var(--c-soft);gap:10px;font-size:12px;}
+    .future-row:last-child{border-bottom:none;}
+    .future-funder{font-weight:600;color:var(--c-text);}
+    .future-why{font-size:11px;color:var(--c-muted);margin-top:2px;}
+    .future-cycle{font-size:10.5px;color:var(--c-faint);white-space:nowrap;}
+    .rej-pill{font-size:10.5px;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+    .rej-pill-good{background:#E7F5EC;color:#1B7A3D;}
+    .rej-pill-bad{background:#FCEAEA;color:#B3261E;}
+    .rej-pill-neutral{background:var(--c-soft);color:var(--c-muted);}
+    .status-msg{background:var(--c-soft);border:0.5px solid var(--c-border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--c-deep);margin-bottom:14px;display:none;}
+    .status-msg.visible{display:flex;align-items:center;gap:8px;}
+    .empty-state{text-align:center;padding:20px 20px;color:var(--c-muted);font-size:13px;}
+    .empty-state i{font-size:36px;color:var(--c-soft);display:block;margin-bottom:12px;}
+    .empty-state-title{font-size:15px;font-weight:500;color:var(--c-text);margin-bottom:6px;}
+
+    /* ── TRACKER TAB ── */
+    .deadline-alert{background:#FEF2F2;border:0.5px solid #FECACA;border-radius:10px;padding:11px 14px;margin-bottom:14px;}
+    .deadline-alert-title{font-size:12px;font-weight:600;color:#991B1B;margin-bottom:3px;}
+    .deadline-alert ul{margin-left:14px;}
+    .deadline-alert li{font-size:11.5px;color:#991B1B;padding:2px 0;}
+    .tracker-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+    .tracker-count{font-size:12px;color:var(--c-muted);}
+    .tracker-count b{color:var(--c-text);font-size:13px;}
+    .btn-row{display:flex;gap:6px;}
+    .btn{display:inline-flex;align-items:center;gap:5px;border:0.5px solid var(--c-border);border-radius:6px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;background:#fff;color:var(--c-text);font-family:var(--font-sans);}
+    .btn:hover{background:var(--c-tint);border-color:var(--c-purple);}
+    .table-wrap{overflow-x:auto;border:0.5px solid var(--c-border);border-radius:10px;}
+    table{width:100%;border-collapse:collapse;font-size:11.5px;min-width:800px;}
+    thead th{text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:var(--c-muted);padding:8px 10px;border-bottom:0.5px solid var(--c-border);background:var(--c-bg);white-space:nowrap;font-weight:700;}
+    tbody td{padding:7px 10px;border-bottom:0.5px solid #F0EDF8;vertical-align:middle;font-size:11.5px;}
+    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:hover{background:var(--c-tint);}
+    tbody tr.row-pursuing td:first-child{border-left:3px solid #F59E0B;}
+    tbody tr.row-submitted td:first-child{border-left:3px solid #0EA5E9;}
+    tbody tr.row-funded td:first-child{border-left:3px solid #16A34A;}
+    tbody tr.row-deferred{opacity:.65;}
+    .table-input{border:0.5px solid transparent;background:transparent;border-radius:4px;padding:2px 5px;font-size:11.5px;width:100%;color:var(--c-text);font-family:var(--font-sans);}
+    .table-input:hover{border-color:var(--c-border);}
+    .table-input:focus{border-color:var(--c-purple);background:#fff;outline:none;}
+    .delete-btn{background:none;border:0.5px solid #FECACA;color:#991B1B;border-radius:4px;padding:2px 7px;font-size:10px;cursor:pointer;}
+    .delete-btn:hover{background:#FEF2F2;}
+
+    /* ── PROPOSAL TAB ── */
+    .proposal-panel{background:#fff;border:0.5px solid var(--c-border);border-radius:12px;padding:16px;margin-bottom:12px;}
+    .proposal-panel h2{font-size:14px;font-weight:500;margin-bottom:3px;}
+    .proposal-panel-desc{font-size:11.5px;color:var(--c-muted);margin-bottom:12px;line-height:1.5;}
+    .doc-checklist{list-style:none;}
+    .doc-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:0.5px solid #F0EDF8;font-size:11.5px;}
+    .doc-item:last-child{border-bottom:none;}
+    .doc-star{color:var(--c-purple);flex-shrink:0;margin-top:1px;}
+    .prompt-preview{background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:12px;font-size:11px;color:var(--c-muted);line-height:1.65;margin-bottom:10px;white-space:pre-wrap;max-height:300px;overflow-y:auto;}
+    .prompt-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-purple);margin-bottom:6px;display:block;}
+    .field-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-deep);display:block;margin-bottom:5px;}
+    .field-select{width:100%;border:0.5px solid var(--c-border);border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--c-text);font-family:var(--font-sans);margin-bottom:12px;}
+    .field-select:focus{outline:none;border-color:var(--c-purple);}
+
+    /* ── ABOUT TAB ── */
+    .acc-item{border:0.5px solid var(--c-border);border-radius:10px;overflow:hidden;margin-bottom:8px;background:#fff;}
+    .acc-trigger{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border:none;cursor:pointer;text-align:left;font-family:var(--font-sans);}
+    .acc-trigger:hover,.acc-trigger.acc-open{background:var(--c-tint);}
+    .acc-trigger.acc-open{border-bottom:0.5px solid var(--c-border);}
+    .acc-num{width:22px;height:22px;border-radius:50%;background:var(--c-purple);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .acc-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--c-purple);display:block;}
+    .acc-title{font-size:13px;font-weight:500;color:var(--c-text);}
+    .acc-chev{margin-left:auto;color:var(--c-muted);font-size:14px;transition:transform .2s;flex-shrink:0;}
+    .acc-trigger.acc-open .acc-chev{transform:rotate(180deg);}
+    .acc-body{display:none;padding:14px;}
+    .acc-body.acc-open{display:block;}
+
+    /* ── SETTINGS TAB ── */
+    .settings-panel{background:#fff;border:0.5px solid var(--c-border);border-radius:12px;padding:16px;margin-bottom:12px;}
+    .settings-panel h2{font-size:14px;font-weight:500;margin-bottom:4px;}
+    .settings-panel-desc{font-size:11.5px;color:var(--c-muted);margin-bottom:12px;line-height:1.5;}
+    .api-key-row{display:flex;gap:8px;align-items:flex-end;}
+    .api-key-input{width:100%;border:0.5px solid var(--c-border);border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--c-text);font-family:var(--font-sans);}
+    .api-key-input:focus{outline:none;border-color:var(--c-purple);}
+    .save-key-btn{background:var(--c-purple);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);}
+    .save-key-btn:hover{background:var(--c-deep);}
+    .key-status{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:#DCFCE7;color:#166534;display:none;}
+    .key-status.visible{display:inline-block;}
+    .memory-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+    .memory-stat{background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px 12px;text-align:center;}
+    .memory-stat-n{font-size:18px;font-weight:500;color:var(--c-deep);}
+    .memory-stat-l{font-size:9px;text-transform:uppercase;letter-spacing:.04em;color:var(--c-muted);margin-top:2px;}
+    .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .profile-field{display:flex;flex-direction:column;gap:4px;}
+    .profile-field.full{grid-column:1/-1;}
+    .profile-input,.profile-textarea{border:0.5px solid var(--c-border);border-radius:8px;padding:7px 10px;font-size:12.5px;color:var(--c-text);font-family:var(--font-sans);}
+    .profile-textarea{resize:vertical;min-height:56px;}
+    .profile-input:focus,.profile-textarea:focus{outline:none;border-color:var(--c-purple);}
+    .save-profile-btn{background:var(--c-purple);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;margin-top:10px;font-family:var(--font-sans);}
+    .save-profile-btn:hover{background:var(--c-deep);}
+    .memory-btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+    .memory-btn{border:0.5px solid var(--c-border);border-radius:6px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;background:#fff;color:var(--c-text);font-family:var(--font-sans);}
+    .memory-btn:hover{background:var(--c-tint);border-color:var(--c-purple);}
+    .memory-btn-danger{color:#991B1B;border-color:#FECACA;}
+    .memory-btn-danger:hover{background:#FEF2F2;}
+    .api-note{background:var(--c-tint);border-radius:8px;padding:8px 10px;font-size:10.5px;color:var(--c-muted);line-height:1.6;margin-top:10px;}
+
+    /* ── SHARED PILLS ── */
+    .pill{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:20px;white-space:nowrap;}
+    .pill-open{background:#DCFCE7;color:#166534;}
+    .pill-rolling{background:#E0F2FE;color:#0369A1;}
+    .pill-pass{background:#DCFCE7;color:#166534;}
+    .pill-flag{background:#FEF3C7;color:#92400E;}
+    .pill-verified{background:var(--c-soft);color:var(--c-deep);}
+
+    /* ── FIT DOTS ── */
+    .fit-dots{display:inline-flex;gap:2px;vertical-align:middle;}
+    .fit-dot{width:7px;height:7px;border-radius:50%;background:#E5E7EB;}
+    .fit-dot.filled{background:var(--c-purple);}
+
+    /* ── DEADLINE BADGES ── */
+    .dl-urgent{background:#FEE2E2;color:#991B1B;font-size:9px;font-weight:700;padding:1px 7px;border-radius:20px;}
+    .dl-soon{background:#FEF3C7;color:#92400E;font-size:9px;font-weight:700;padding:1px 7px;border-radius:20px;}
+    .dl-ok{background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:1px 7px;border-radius:20px;}
+    .dl-roll{background:#F3F4F6;color:var(--c-muted);font-size:9px;font-weight:700;padding:1px 7px;border-radius:20px;}
+
+    /* ── TOAST ── */
+    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--c-text);color:#fff;padding:10px 20px;border-radius:8px;font-size:12.5px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:9999;transition:transform .3s ease;pointer-events:none;}
+    #toast.toast-visible{transform:translateX(-50%) translateY(0);}
+
+    /* ── SPIN ANIMATION ── */
+    .spin{animation:spin 1s linear infinite;}
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:860px){
+      .landing-nav-links a{display:none;}
+    }
+    @media(max-width:640px){
+      .features-grid{grid-template-columns:1fr;}
+      .how-steps{flex-direction:column;align-items:center;}
+      .how-step:not(:last-child)::after{display:none;}
+      .summary-stats{grid-template-columns:repeat(3,1fr);}
+      .chip-grid{grid-template-columns:1fr;}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .start-btn,.pipeline-step,.spin{transition:none;animation:none;}
+    }
+  </style>
+  <!-- Google Identity Services — Tier 1 sign-in gate (auth.js) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+<!-- ================================================================
+     AUTH GATE — Tier 1 Google Sign-In (auth.js)
+     Hidden by default; shown by requireSignIn() when entering the
+     app without an existing session. Purely client-side access gate.
+================================================================ -->
+<div id="auth-gate" style="display:none;position:fixed;inset:0;z-index:9999;
+     background:rgba(17,17,17,.55);backdrop-filter:blur(3px);
+     align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:16px;max-width:360px;width:100%;
+       padding:32px 28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);">
+    <svg width="44" height="44" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin:0 auto 14px;display:block;">
+      <defs><linearGradient id="lg-gate" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+      <rect width="80" height="80" rx="18" fill="url(#lg-gate)"/>
+      <circle cx="40" cy="40" r="6.5" fill="#fff"/><circle cx="40" cy="40" r="3" fill="url(#lg-gate)"/>
+    </svg>
+    <div style="font-family:var(--font-display,inherit);font-weight:700;font-size:19px;color:#1F2937;margin-bottom:4px;">
+      Sign in to Fundigo
+    </div>
+    <p style="font-size:12.5px;color:#6B7280;line-height:1.6;margin:0 0 20px;">
+      Use your Google or nonprofit Google Workspace account.
+      Nothing is uploaded — your grant data stays in this browser.
+    </p>
+    <div id="google-signin-btn" style="display:flex;justify-content:center;min-height:44px;align-items:center;"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ================================================================
+     VIEW 1 — LANDING PAGE
+================================================================ -->
+<div id="view-landing">
+
+  <nav class="landing-nav">
+    <a class="landing-nav-logo" href="#">
+      <svg width="30" height="30" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="lg0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+        <rect width="80" height="80" rx="18" fill="url(#lg0)"/>
+        <line x1="40" y1="33" x2="40" y2="18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="40" y1="47" x2="40" y2="62" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="33" y1="40" x2="18" y2="40" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="47" y1="40" x2="62" y2="40" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="34" y1="34" x2="23" y2="23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+        <line x1="46" y1="34" x2="57" y2="23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+        <line x1="34" y1="46" x2="23" y2="57" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+        <line x1="46" y1="46" x2="57" y2="57" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+        <circle cx="40" cy="17" r="3" fill="#fff" opacity=".9"/><circle cx="40" cy="63" r="3" fill="#fff" opacity=".9"/>
+        <circle cx="17" cy="40" r="3" fill="#fff" opacity=".9"/><circle cx="63" cy="40" r="3" fill="#fff" opacity=".9"/>
+        <circle cx="22" cy="22" r="2.5" fill="#fff" opacity=".8"/><circle cx="58" cy="22" r="2.5" fill="#fff" opacity=".8"/>
+        <circle cx="22" cy="58" r="2.5" fill="#fff" opacity=".8"/><circle cx="58" cy="58" r="2.5" fill="#fff" opacity=".8"/>
+        <circle cx="40" cy="40" r="6.5" fill="#fff"/><circle cx="40" cy="40" r="3" fill="url(#lg0)"/>
+        <circle cx="11" cy="12" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="11" r="1.8" fill="#fff" opacity=".4"/>
+        <circle cx="11" cy="68" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="69" r="1.8" fill="#fff" opacity=".4"/>
+      </svg>
+      <div class="landing-nav-name">Fundi<span>go</span></div>
+    </a>
+    <div class="landing-nav-links">
+      <a href="index.html">Home</a>
+      <a href="#" onclick="enterApp();setTimeout(function(){var t=document.querySelectorAll('.app-tab')[3];if(t)switchTab('about',t);},100);return false;">About</a>
+      <a href="faq.html">Help</a>
+      <button class="landing-nav-cta" onclick="enterApp()">Start here</button>
+    </div>
+  </nav>
+
+  <section class="hero" aria-label="Hero">
+    <canvas id="network-canvas" aria-hidden="true"></canvas>
+    <div class="hero-content">
+      <div class="hero-eyebrow"><i class="ti ti-sparkles" aria-hidden="true"></i> AI-powered · Verified leads · Human in control</div>
+      <h1 class="hero-title">Find the grants<br>your <b>mission deserves</b></h1>
+
+
+    </div>
+  </section>
+
+  <div class="stats-strip">
+    <div class="stats-strip-item"><div class="stats-strip-n">750K+</div><div class="stats-strip-l">nonprofits this is built for</div></div>
+    <div class="stats-strip-item"><div class="stats-strip-n">5 layers</div><div class="stats-strip-l">of AI verification before you see a result</div></div>
+    <div class="stats-strip-item"><div class="stats-strip-n">30 min</div><div class="stats-strip-l">staff time per week to run a full search</div></div>
+    <div class="stats-strip-item"><div class="stats-strip-n">$0.00</div><div class="stats-strip-l">total cost for any org</div></div>
+  </div>
+
+
+  <section class="how-section" id="how-it-works">
+    <h2 class="how-title">How it works</h2>
+    <p class="how-sub">From search to submitted proposal in five steps</p>
+    <div class="how-steps">
+      <div class="how-step"><div class="how-step-num">1</div><div class="how-step-title">Choose category</div><div class="how-step-desc">Pick a funder type or type a custom search</div></div>
+      <div class="how-step"><div class="how-step-num">2</div><div class="how-step-title">AI searches</div><div class="how-step-desc">5-layer pipeline runs automatically</div></div>
+      <div class="how-step"><div class="how-step-num">3</div><div class="how-step-title">Review results</div><div class="how-step-desc">Verified, scored, guard-checked leads only</div></div>
+      <div class="how-step"><div class="how-step-num">4</div><div class="how-step-title">Track pipeline</div><div class="how-step-desc">Add to tracker, assign, set deadlines</div></div>
+      <div class="how-step"><div class="how-step-num">5</div><div class="how-step-title">Draft &amp; submit</div><div class="how-step-desc">NotebookLM drafts, staff reviews, submits</div></div>
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    <div class="landing-footer-logo">
+      <svg width="24" height="24" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="lg-footer" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+        <rect width="80" height="80" rx="18" fill="url(#lg-footer)"/>
+        <line x1="40" y1="33" x2="40" y2="18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="40" y1="47" x2="40" y2="62" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="33" y1="40" x2="18" y2="40" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="47" y1="40" x2="62" y2="40" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="34" y1="34" x2="23" y2="23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+        <line x1="46" y1="34" x2="57" y2="23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+        <line x1="34" y1="46" x2="23" y2="57" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+        <line x1="46" y1="46" x2="57" y2="57" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+        <circle cx="40" cy="17" r="3" fill="#fff" opacity=".9"/><circle cx="40" cy="63" r="3" fill="#fff" opacity=".9"/>
+        <circle cx="17" cy="40" r="3" fill="#fff" opacity=".9"/><circle cx="63" cy="40" r="3" fill="#fff" opacity=".9"/>
+        <circle cx="22" cy="22" r="2.5" fill="#fff" opacity=".8"/><circle cx="58" cy="22" r="2.5" fill="#fff" opacity=".8"/>
+        <circle cx="22" cy="58" r="2.5" fill="#fff" opacity=".8"/><circle cx="58" cy="58" r="2.5" fill="#fff" opacity=".8"/>
+        <circle cx="40" cy="40" r="6.5" fill="#fff"/><circle cx="40" cy="40" r="3" fill="url(#lg-footer)"/>
+        <circle cx="11" cy="12" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="11" r="1.8" fill="#fff" opacity=".4"/>
+        <circle cx="11" cy="68" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="69" r="1.8" fill="#fff" opacity=".4"/>
+      </svg>
+      <div class="landing-footer-name">Fundi<span>go</span></div>
+    </div>
+    <div class="landing-footer-links">
+      <a href="index.html">Home</a>
+      <a href="faq.html">Help</a>
+      <a href="https://www.linkedin.com/in/madhudevi/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://mdevi25.github.io/" target="_blank" rel="noopener">Portfolio</a>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+      <div class="landing-footer-badge">$0.00 / mo</div>
+      <div style="font-size:10px;color:#6B7280;">&#169; 2026 Madhu Devi. All rights reserved.</div>
+    </div>
+  </footer>
+
+</div><!-- /view-landing -->
+
+<!-- ================================================================
+     VIEW 2 — APP SHELL
+================================================================ -->
+<div id="view-app">
+<div class="app-shell">
+
+  <!-- APP HEADER — consistent across all tabs -->
+  <header class="app-hdr">
+    <div class="app-hdr-stripe"></div>
+    <div class="app-hdr-body">
+      <div class="app-hdr-row">
+        <svg width="34" height="34" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-label="Fundigo" role="img">
+          <defs><linearGradient id="lg-app" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+          <rect width="80" height="80" rx="18" fill="url(#lg-app)"/>
+          <line x1="40" y1="33" x2="40" y2="18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+          <line x1="40" y1="47" x2="40" y2="62" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+          <line x1="33" y1="40" x2="18" y2="40" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+          <line x1="47" y1="40" x2="62" y2="40" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+          <line x1="34" y1="34" x2="23" y2="23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+          <line x1="46" y1="34" x2="57" y2="23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+          <line x1="34" y1="46" x2="23" y2="57" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+          <line x1="46" y1="46" x2="57" y2="57" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+          <circle cx="40" cy="17" r="3" fill="#fff" opacity=".9"/><circle cx="40" cy="63" r="3" fill="#fff" opacity=".9"/>
+          <circle cx="17" cy="40" r="3" fill="#fff" opacity=".9"/><circle cx="63" cy="40" r="3" fill="#fff" opacity=".9"/>
+          <circle cx="22" cy="22" r="2.5" fill="#fff" opacity=".8"/><circle cx="58" cy="22" r="2.5" fill="#fff" opacity=".8"/>
+          <circle cx="22" cy="58" r="2.5" fill="#fff" opacity=".8"/><circle cx="58" cy="58" r="2.5" fill="#fff" opacity=".8"/>
+          <circle cx="40" cy="40" r="6.5" fill="#fff"/><circle cx="40" cy="40" r="3" fill="url(#lg-app)"/>
+          <circle cx="11" cy="12" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="11" r="1.8" fill="#fff" opacity=".4"/>
+          <circle cx="11" cy="68" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="69" r="1.8" fill="#fff" opacity=".4"/>
+        </svg>
+        <div style="flex:1;">
+          <div class="app-hdr-title">Fundi<span>go</span></div>
+          <div class="app-hdr-sub">AI-powered grant intelligence for nonprofits</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <div id="auth-header-slot"></div>
+          <div class="app-hdr-badge">$0.00 / mo</div>
+          <a href="index.html" onclick="exitApp();return false;" style="font-size:10px;color:var(--c-muted);text-decoration:none;display:flex;align-items:center;gap:3px;" title="Back to home">
+            <i class="ti ti-arrow-left" style="font-size:10px;" aria-hidden="true"></i> Back to site
+          </a>
+        </div>
+      </div>
+      <nav class="app-tabs" role="tablist" aria-label="App navigation">
+        <button class="app-tab tab-active" role="tab" aria-selected="true"  onclick="switchTab('discover', this)">Discover</button>
+        <button class="app-tab"            role="tab" aria-selected="false" onclick="switchTab('tracker',  this)">Tracker <span class="tab-badge" id="tracker-tab-badge" style="display:none;">0</span></button>
+        <button class="app-tab"            role="tab" aria-selected="false" onclick="switchTab('proposal', this)">Proposal</button>
+        <button class="app-tab"            role="tab" aria-selected="false" onclick="switchTab('about',    this)">About</button>
+        <button class="app-tab"            role="tab" aria-selected="false" onclick="switchTab('settings', this)">Settings</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="app-content">
+
+    <!-- ══════════════════════════════════════════
+         DISCOVER TAB
+    ══════════════════════════════════════════ -->
+    <div id="tab-discover" class="tab-section tab-active" role="tabpanel">
+
+      <div class="search-panel" id="search-panel">
+        <div class="search-panel-summary">
+          <span class="search-panel-summary-text" id="search-panel-summary-text"><i class="ti ti-search" style="font-size:13px;" aria-hidden="true"></i> Searched</span>
+          <button class="search-panel-change-btn" onclick="expandSearchPanel()">Change search</button>
+        </div>
+        <h2>What do you want to search for?</h2>
+        <p class="search-panel-desc">Select a category or type a custom search. Results are verified, scored, and guard-checked before you see them.</p>
+
+        <div class="chip-grid" id="chip-grid">
+          <div class="chip" data-category="community" onclick="selectChip(this)">
+            <div class="chip-icon" style="background:#E0F2FE;"><i class="ti ti-home" style="font-size:14px;color:#0369A1;" aria-hidden="true"></i></div>
+            <div><span class="chip-label">Community foundations</span><span class="chip-desc">Local giving, rolling deadlines</span></div>
+          </div>
+          <div class="chip" data-category="corporate" onclick="selectChip(this)">
+            <div class="chip-icon" style="background:#FEF3C7;"><i class="ti ti-building" style="font-size:14px;color:#D97706;" aria-hidden="true"></i></div>
+            <div><span class="chip-label">Corporate giving</span><span class="chip-desc">Unpublicized company programs</span></div>
+          </div>
+          <div class="chip" data-category="government" onclick="selectChip(this)">
+            <div class="chip-icon" style="background:#DCFCE7;"><i class="ti ti-landmark" style="font-size:14px;color:#166534;" aria-hidden="true"></i></div>
+            <div><span class="chip-label">Government grants</span><span class="chip-desc">Federal, state, Title I</span></div>
+          </div>
+          <div class="chip" data-category="faith" onclick="selectChip(this)">
+            <div class="chip-icon" style="background:#FEE2E2;"><i class="ti ti-heart" style="font-size:14px;color:#991B1B;" aria-hidden="true"></i></div>
+            <div><span class="chip-label">Faith-based funders</span><span class="chip-desc">Churches, dioceses, missions</span></div>
+          </div>
+          <div class="chip" data-category="family" onclick="selectChip(this)">
+            <div class="chip-icon" style="background:#F3E8FF;"><i class="ti ti-users" style="font-size:14px;color:#7C3AED;" aria-hidden="true"></i></div>
+            <div><span class="chip-label">Family foundations</span><span class="chip-desc">Private, rarely publicized</span></div>
+          </div>
+          <div class="chip" data-category="healthcare" onclick="selectChip(this)">
+            <div class="chip-icon" style="background:#FEE2E2;"><i class="ti ti-heart-handshake" style="font-size:14px;color:#991B1B;" aria-hidden="true"></i></div>
+            <div><span class="chip-label">Healthcare foundations</span><span class="chip-desc">Health equity, trauma-informed</span></div>
+          </div>
+          <div class="chip chip-full" data-category="all" onclick="selectChip(this)">
+            <div class="chip-icon" style="background:#EDE9FE;"><i class="ti ti-planet" style="font-size:14px;color:#7C3AED;" aria-hidden="true"></i></div>
+            <div><span class="chip-label" style="color:#5B21B6;">Grants for after school tutoring</span><span class="chip-desc">Illinois &amp; Texas · underserved K-12 students</span></div>
+          </div>
+        </div>
+
+        <div>
+          <span class="custom-search-label">Or describe what you need</span>
+          <div class="custom-search-row">
+            <div class="custom-search-input-wrap">
+              <textarea id="custom-search-input" class="custom-search-input"
+                placeholder="e.g. grants for after-school tutoring in Chicago South Side..."
+                maxlength="280" oninput="updateCharCount(this); clearChips();"
+                aria-label="Custom search (max 280 characters)"></textarea>
+              <span class="char-counter" id="char-counter">0/280</span>
+            </div>
+            <button class="run-btn" id="run-btn" onclick="runPipeline()">
+              <i class="ti ti-player-play" style="font-size:13px;" aria-hidden="true"></i> Run search
+            </button>
+            <button class="opp-ctrl-btn" onclick="resetSearch()" style="flex-shrink:0;" title="Reset selection">
+              <i class="ti ti-refresh" style="font-size:11px;" aria-hidden="true"></i> Reset
+            </button>
+          </div>
+          <div class="search-hint">280 char limit keeps token usage low · category buttons above use zero custom tokens</div>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="status-msg" id="status-msg" role="status">
+        <i class="ti ti-loader-2 spin" style="font-size:14px;" aria-hidden="true"></i>
+        <span id="status-msg-text">Running…</span>
+      </div>
+
+      <!-- Pipeline bar -->
+      <div class="pipeline-bar" id="pipeline-bar" style="display:none;" aria-label="Pipeline progress">
+        <div class="pipeline-step" id="pipe-1"><i class="ti ti-search" style="font-size:9px;" aria-hidden="true"></i> 1 — Discover</div>
+        <div class="pipeline-arrow" aria-hidden="true">→</div>
+        <div class="pipeline-step" id="pipe-15"><i class="ti ti-link" style="font-size:9px;" aria-hidden="true"></i> 1.5 — Verify</div>
+        <div class="pipeline-arrow" aria-hidden="true">→</div>
+        <div class="pipeline-step" id="pipe-2"><i class="ti ti-star" style="font-size:9px;" aria-hidden="true"></i> 2 — Qualify</div>
+        <div class="pipeline-arrow" aria-hidden="true">→</div>
+        <div class="pipeline-step" id="pipe-25"><i class="ti ti-shield" style="font-size:9px;" aria-hidden="true"></i> 2.5 — Guard</div>
+        <div class="pipeline-arrow" aria-hidden="true">→</div>
+        <div class="pipeline-step" id="pipe-3"><i class="ti ti-table" style="font-size:9px;" aria-hidden="true"></i> 3 — Tracker</div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="summary-stats" id="summary-stats" style="display:none;">
+        <div class="summary-stat"><div class="summary-stat-n" id="stat-found">—</div><div class="summary-stat-l">Found</div></div>
+        <div class="summary-stat"><div class="summary-stat-n" id="stat-verified">—</div><div class="summary-stat-l">Verified</div></div>
+        <div class="summary-stat"><div class="summary-stat-n" id="stat-filtered">—</div><div class="summary-stat-l">Filtered</div></div>
+        <div class="summary-stat"><div class="summary-stat-n" id="stat-avg-fit">—</div><div class="summary-stat-l">Avg fit</div></div>
+        <div class="summary-stat"><div class="summary-stat-n" id="stat-highest">—</div><div class="summary-stat-l">Highest</div></div>
+      </div>
+
+      <!-- Top 3 -->
+      <div class="top-recs" id="top-recs" style="display:none;">
+        <div class="top-recs-title">Top 3 recommendations</div>
+        <div id="top-recs-content"></div>
+      </div>
+
+      <!-- Controls -->
+      <div class="opp-ctrl-row" id="opp-controls" style="display:none;">
+        <button class="opp-ctrl-btn" onclick="expandAllOpps()"><i class="ti ti-arrows-maximize" style="font-size:11px;" aria-hidden="true"></i> Expand all</button>
+        <button class="opp-ctrl-btn" onclick="collapseAllOpps()"><i class="ti ti-arrows-minimize" style="font-size:11px;" aria-hidden="true"></i> Collapse all</button>
+        <button class="opp-ctrl-btn" onclick="addAllToTracker()" style="margin-left:auto;"><i class="ti ti-plus" style="font-size:11px;" aria-hidden="true"></i> Add all verified</button>
+      </div>
+
+      <!-- Results -->
+      <div id="results-container"></div>
+      <div id="future-container"></div>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="discover-empty">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <div class="empty-state-title">Ready to discover grants</div>
+        <div>Select a category above and click <b>Run search</b> to start your first discovery run.</div>
+      </div>
+
+    </div><!-- /tab-discover -->
+
+
+    <!-- ══════════════════════════════════════════
+         TRACKER TAB
+    ══════════════════════════════════════════ -->
+    <div id="tab-tracker" class="tab-section" role="tabpanel">
+
+      <div class="deadline-alert" id="deadline-alert" style="display:none;" role="alert">
+        <div class="deadline-alert-title"><i class="ti ti-alarm" style="font-size:12px;vertical-align:-1px;" aria-hidden="true"></i> <span id="deadline-alert-title-text"></span></div>
+        <ul id="deadline-alert-list"></ul>
+      </div>
+
+      <div class="summary-stats" id="tracker-stats">
+        <div class="summary-stat"><div class="summary-stat-n" id="ts-total">0</div><div class="summary-stat-l">Total</div></div>
+        <div class="summary-stat"><div class="summary-stat-n" id="ts-pursuing" style="color:#D97706;">0</div><div class="summary-stat-l">Pursuing</div></div>
+        <div class="summary-stat"><div class="summary-stat-n" id="ts-submitted" style="color:#0369A1;">0</div><div class="summary-stat-l">Submitted</div></div>
+        <div class="summary-stat"><div class="summary-stat-n" id="ts-funded" style="color:#16A34A;">0</div><div class="summary-stat-l">Funded</div></div>
+        <div class="summary-stat"><div class="summary-stat-n" id="ts-pipeline" style="font-size:15px;">—</div><div class="summary-stat-l">Pipeline value</div></div>
+      </div>
+
+      <div class="tracker-toolbar">
+        <div class="tracker-count"><b id="tracker-row-count">0</b> opportunities tracked · sorted by deadline</div>
+        <div class="btn-row">
+          <button class="btn" onclick="addBlankTrackerRow()"><i class="ti ti-plus" style="font-size:11px;" aria-hidden="true"></i> Add manually</button>
+          <button class="btn" onclick="exportTrackerToCSV()"><i class="ti ti-download" style="font-size:11px;" aria-hidden="true"></i> Export CSV</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table aria-label="Grant tracker">
+          <thead>
+            <tr>
+              <th>Funder</th><th>Program</th><th>Amount</th>
+              <th>Deadline (mm-dd-yyyy)</th><th>Fit</th><th>Status</th>
+              <th>Source</th><th>Assigned</th><th>Notes</th>
+              <th>Date found</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="tracker-body"></tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" id="tracker-empty" style="display:none;">
+        <i class="ti ti-table" aria-hidden="true"></i>
+        <div class="empty-state-title">No opportunities tracked yet</div>
+        <div>Run a discovery search and click <b>Add to tracker</b> to build your pipeline.</div>
+      </div>
+
+    </div><!-- /tab-tracker -->
+
+
+    <!-- ══════════════════════════════════════════
+         PROPOSAL TAB
+    ══════════════════════════════════════════ -->
+    <div id="tab-proposal" class="tab-section" role="tabpanel">
+
+      <div class="proposal-panel">
+        <h2>Step 1 — Set up your NotebookLM knowledge base</h2>
+        <p class="proposal-panel-desc">Do this once. Upload your org documents to NotebookLM. Every proposal draft draws from these — no invented facts.</p>
+        <ul class="doc-checklist">
+          <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Mission, vision, and values statement</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Core context for every proposal</div></div></li>
+          <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Program descriptions</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">What you do, in grant language</div></div></li>
+          <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Student outcome data and impact statistics</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Real numbers only — never invented</div></div></li>
+          <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>IRS 501(c)(3) determination letter</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Required by nearly every funder</div></div></li>
+          <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Past funders list</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Builds credibility with new funders</div></div></li>
+          <li class="doc-item"><span style="color:var(--c-faint);" aria-hidden="true">○</span><div style="color:var(--c-muted);font-size:11.5px;">Budget overview · Student testimonials · Service areas <span style="font-size:10px;">(optional but recommended)</span></div></li>
+        </ul>
+        <div class="btn-row" style="margin-top:12px;">
+          <a href="https://notebooklm.google.com" class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple);" target="_blank" rel="noopener">
+            <i class="ti ti-external-link" style="font-size:12px;" aria-hidden="true"></i> Open NotebookLM
+          </a>
+        </div>
+      </div>
+
+      <div class="proposal-panel">
+        <h2>Step 2 — Generate your proposal prompt</h2>
+        <p class="proposal-panel-desc">Select an opportunity, copy the prompt, paste into NotebookLM alongside the funder's RFP.</p>
+        <label class="field-label" for="proposal-opp-select">Select opportunity from tracker</label>
+        <select id="proposal-opp-select" class="field-select" onchange="onProposalOppChange()">
+          <option value="">— Select an opportunity —</option>
+          <option value="generic">📝 Generic template (no specific funder)</option>
+        </select>
+        <div id="proposal-prompt-wrap" style="display:none;">
+          <span class="prompt-label">Generated NotebookLM prompt</span>
+          <pre id="proposal-prompt-text" class="prompt-preview"></pre>
+          <div class="btn-row">
+            <button class="btn" style="background:var(--c-purple);color:#fff;border-color:var(--c-purple);" onclick="copyProposalPrompt()">
+              <i class="ti ti-copy" style="font-size:12px;" aria-hidden="true"></i> Copy prompt
+            </button>
+            <a href="https://notebooklm.google.com" class="btn" target="_blank" rel="noopener">
+              <i class="ti ti-external-link" style="font-size:12px;" aria-hidden="true"></i> Open NotebookLM
+            </a>
+          </div>
+        </div>
+        <div class="api-note" style="margin-top:12px;">No opportunities in tracker yet? Run a discovery search, add results to the tracker, and they'll appear in the dropdown above.</div>
+      </div>
+
+      <div class="proposal-panel">
+        <h2>Step 3 — Draft, review, and submit</h2>
+        <p class="proposal-panel-desc">Follow these steps inside NotebookLM after pasting the prompt.</p>
+        <div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">1</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Paste the funder's RFP into NotebookLM</div><div style="font-size:11.5px;color:var(--c-muted);">Upload grant guidelines as a new source document before prompting.</div></div></div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">2</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Paste the generated prompt into the chat</div><div style="font-size:11.5px;color:var(--c-muted);">NotebookLM drafts using only your uploaded org documents.</div></div></div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">3</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Fill every [INSERT: ...] placeholder</div><div style="font-size:11.5px;color:var(--c-muted);">Never submit with unfilled placeholders — a funder will reject it.</div></div></div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">4</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Human review and edit</div><div style="font-size:11.5px;color:var(--c-muted);">Check every statistic against your actual documents. Edit for your org's voice.</div></div></div>
+          <div style="display:flex;gap:12px;padding:10px 0;"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">5</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Internal approval and submit</div><div style="font-size:11.5px;color:var(--c-muted);">No application is submitted without human sign-off. AI assists — humans decide.</div></div></div>
+        </div>
+      </div>
+
+    </div><!-- /tab-proposal -->
+
+
+    <!-- ══════════════════════════════════════════
+         ABOUT TAB
+    ══════════════════════════════════════════ -->
+    <div id="tab-about" class="tab-section" role="tabpanel">
+
+      <!-- Section 1 -->
+      <div class="acc-item">
+        <button class="acc-trigger acc-open" onclick="toggleAcc(this)" aria-expanded="true">
+          <div class="acc-num" aria-hidden="true">1</div>
+          <div><span class="acc-label">Mission &amp; Vision</span><span class="acc-title">Why this system exists</span></div>
+          <i class="ti ti-chevron-down acc-chev" aria-hidden="true"></i>
+        </button>
+        <div class="acc-body acc-open">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="background:var(--c-tint);border:0.5px solid var(--c-border);border-radius:8px;padding:12px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--c-purple);margin-bottom:4px;">Mission</div><div style="font-size:11.5px;color:var(--c-text);line-height:1.6;">Helping nonprofits spend less time searching for funding and more time advancing their mission.</div></div>
+            <div style="background:var(--c-tint);border:0.5px solid var(--c-border);border-radius:8px;padding:12px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--c-purple);margin-bottom:4px;">Vision</div><div style="font-size:11.5px;color:var(--c-text);line-height:1.6;">A future where every nonprofit, regardless of size, budget, or staff capacity, has equal access to funding opportunities and the tools to turn them into lasting community impact.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)" aria-expanded="false">
+          <div class="acc-num" aria-hidden="true">2</div>
+          <div><span class="acc-label">Impact &amp; Goal</span><span class="acc-title">The problem we are solving</span></div>
+          <i class="ti ti-chevron-down acc-chev" aria-hidden="true"></i>
+        </button>
+        <div class="acc-body">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">
+            <div style="background:var(--c-soft);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:500;color:var(--c-deep);">750K+</div><div style="font-size:10px;color:var(--c-muted);margin-top:3px;line-height:1.4;">nonprofits under $500K budget with no dedicated grant staff</div></div>
+            <div style="background:var(--c-soft);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:500;color:var(--c-deep);">$0.00</div><div style="font-size:10px;color:var(--c-muted);margin-top:3px;line-height:1.4;">total cost to run this system for any education nonprofit</div></div>
+            <div style="background:var(--c-soft);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:500;color:var(--c-deep);">30 min</div><div style="font-size:10px;color:var(--c-muted);margin-top:3px;line-height:1.4;">staff time per week to discover, qualify, and track new leads</div></div>
+          </div>
+          <div style="background:var(--c-tint);border-left:3px solid var(--c-purple);border-radius:0 8px 8px 0;padding:10px 12px;font-size:11.5px;color:var(--c-text);line-height:1.65;">One Groq API key, a browser, and 30 minutes a week is all it takes. Any small nonprofit in education can clone this, update the org profile, and run it immediately.</div>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)" aria-expanded="false">
+          <div class="acc-num" aria-hidden="true">3</div>
+          <div><span class="acc-label">AI Models</span><span class="acc-title">What runs under the hood and why</span></div>
+          <i class="ti ti-chevron-down acc-chev" aria-hidden="true"></i>
+        </button>
+        <div class="acc-body">
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--c-border);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-muted);"><div>Model</div><div>Role &amp; function</div><div>Limit</div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">groq/compound</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 1 — Discover</span></div><div style="font-size:11px;color:var(--c-muted);">Live web search, up to 10 searches/call. Returns funders, amounts, deadlines, URLs. Memory excludes known funders.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">1K req/day</div></div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">groq/compound</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 1.5 — Verify</span></div><div style="font-size:11px;color:var(--c-muted);">Visits every URL server-side. Filters dead links, login walls, unverifiable pages silently.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">Same key</div></div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">gpt-oss-120b</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 2 — Qualify</span></div><div style="font-size:11px;color:var(--c-muted);">Scores 1–5 vs org profile. Mission, geography, eligibility, risks. Returns structured JSON with recommended action.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">1K req/day</div></div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">gpt-oss-safeguard</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 2.5 — Guard</span></div><div style="font-size:11px;color:var(--c-muted);">Language, bias, accuracy, appropriateness. Soft-flag only — AI never hard-blocks. Humans decide.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">Policy-driven</div></div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;align-items:start;"><div><div style="font-weight:600;font-size:12px;">Google NotebookLM</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 4 — Propose</span></div><div style="font-size:11px;color:var(--c-muted);">Drafts from real org documents only. No invented stats. Marks gaps [INSERT: ...]. Upload once, reuse forever.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">No API key</div></div></div>
+          <div style="margin-top:10px;background:var(--c-tint);border-radius:7px;padding:8px 10px;font-size:10.5px;color:var(--c-muted);">One Groq key covers all AI layers. Weekly run uses ~16,200 tokens — under 10% of the free daily limit. Resets every 24 hours.</div>
+        </div>
+      </div>
+
+      <!-- Section 4 -->
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)" aria-expanded="false">
+          <div class="acc-num" aria-hidden="true">4</div>
+          <div><span class="acc-label">Tab Guide</span><span class="acc-title">How each tab works</span></div>
+          <i class="ti ti-chevron-down acc-chev" aria-hidden="true"></i>
+        </button>
+        <div class="acc-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-search" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">Discover</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">Category chips or custom search (280 char). 5-layer pipeline runs automatically. Every result has a working URL, fit score, and why-qualifies explanation.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-table" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">Tracker</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">Inline editable pipeline. Status changes auto-exclude funders from future searches. Deadline badges turn red within 14 days. CSV export for team sharing.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-file-text" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">Proposal</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">Select opportunity → copy generated prompt → paste into NotebookLM with funder's RFP. Drafts use only real org documents. Every gap marked [INSERT: ...].</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-info-circle" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">About</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">This tab. Mission, AI models, tab guide, and architecture. Any team member or judge understands the full system in under 2 minutes.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;grid-column:1/-1;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-settings" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">Settings</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">Groq API key (session only — never saved permanently). Search memory — known funders excluded, dead URLs cached 60 days, domains cached 30 days. Org profile editor.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5 -->
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)" aria-expanded="false">
+          <div class="acc-num" aria-hidden="true">5</div>
+          <div><span class="acc-label">Architecture</span><span class="acc-title">Pipeline flow and what makes this stand out</span></div>
+          <i class="ti ti-chevron-down acc-chev" aria-hidden="true"></i>
+        </button>
+        <div class="acc-body">
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:var(--c-purple);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">1</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Discovery — groq/compound</div><div style="font-size:10.5px;color:var(--c-muted);">Live web search, 6 funder categories. Memory auto-excludes known funders.</div></div><span style="font-size:9px;font-weight:700;background:var(--c-soft);color:var(--c-deep);padding:2px 7px;border-radius:20px;white-space:nowrap;">Web search</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">1.5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Link verification — visit_website</div><div style="font-size:10.5px;color:var(--c-muted);">Every URL visited server-side. Dead, login wall, unverifiable → silently dropped. Cached 60 days.</div></div><span style="font-size:9px;font-weight:700;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;white-space:nowrap;">Filters dead links</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#D97706;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">2</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Qualification — gpt-oss-120b</div><div style="font-size:10.5px;color:var(--c-muted);">Fit score 1–5 vs org profile. Mission, geography, eligibility, risks. Below minimum → filtered out.</div></div><span style="font-size:9px;font-weight:700;background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;white-space:nowrap;">Fit score</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#991B1B;color:#fff;font-size:7.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">2.5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Guard — gpt-oss-safeguard-20b</div><div style="font-size:10.5px;color:var(--c-muted);">Language, bias, accuracy, appropriateness. Soft-flag only — never hard-blocks.</div></div><span style="font-size:9px;font-weight:700;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;white-space:nowrap;">Guardrails</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#166534;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">3</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Tracker — browser + memory</div><div style="font-size:10.5px;color:var(--c-muted);">Verified results land here. Status changes feed back to memory. CSV export.</div></div><span style="font-size:9px;font-weight:700;background:#DCFCE7;color:#166534;padding:2px 7px;border-radius:20px;white-space:nowrap;">Persistent</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:var(--c-deep);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">4</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Proposal — NotebookLM</div><div style="font-size:10.5px;color:var(--c-muted);">Generated prompt + org docs → draft grounded in real data only.</div></div><span style="font-size:9px;font-weight:700;background:var(--c-soft);color:var(--c-deep);padding:2px 7px;border-radius:20px;white-space:nowrap;">Human-driven</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#374151;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Human review — staff submits</div><div style="font-size:10.5px;color:var(--c-muted);">AI discovers and drafts. Humans decide and submit. Always.</div></div><span style="font-size:9px;font-weight:700;background:#DCFCE7;color:#166534;padding:2px 7px;border-radius:20px;white-space:nowrap;">Human in control</span></div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;">
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px;"><i class="ti ti-filter" style="font-size:16px;color:var(--c-purple);" aria-hidden="true"></i><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin:4px 0 3px;">5-layer pipeline</div><div style="font-size:10px;color:var(--c-muted);line-height:1.5;">Each layer filters noise. Only the best reach staff.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px;"><i class="ti ti-brain" style="font-size:16px;color:var(--c-purple);" aria-hidden="true"></i><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin:4px 0 3px;">Search memory</div><div style="font-size:10px;color:var(--c-muted);line-height:1.5;">Every run smarter. Known funders excluded automatically.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px;"><i class="ti ti-shield-check" style="font-size:16px;color:var(--c-purple);" aria-hidden="true"></i><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin:4px 0 3px;">Guardrails</div><div style="font-size:10px;color:var(--c-muted);line-height:1.5;">Bias, accuracy, appropriateness checked every run.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px;"><i class="ti ti-link-off" style="font-size:16px;color:var(--c-purple);" aria-hidden="true"></i><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin:4px 0 3px;">Zero dead links</div><div style="font-size:10px;color:var(--c-muted);line-height:1.5;">Every URL visited server-side before staff sees it.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px;"><i class="ti ti-plug" style="font-size:16px;color:var(--c-purple);" aria-hidden="true"></i><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin:4px 0 3px;">Modular</div><div style="font-size:10px;color:var(--c-muted);line-height:1.5;">One config line swaps any AI provider.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px;"><i class="ti ti-currency-dollar-off" style="font-size:16px;color:var(--c-purple);" aria-hidden="true"></i><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin:4px 0 3px;">Zero cost</div><div style="font-size:10px;color:var(--c-muted);line-height:1.5;">Under 10% of free daily token limit per weekly run.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-about -->
+
+
+    <!-- ══════════════════════════════════════════
+         SETTINGS TAB
+    ══════════════════════════════════════════ -->
+    <div id="tab-settings" class="tab-section" role="tabpanel">
+
+      <div class="settings-panel">
+        <h2>Team data — org-owned Shared Drive</h2>
+        <p class="settings-panel-desc">
+          Grant data lives in a Google Sheet inside your org's Shared Drive —
+          not on Netlify, and not owned by any one person's account. If a
+          volunteer who's a team member leaves, removing them from the
+          Shared Drive's membership is all that's needed; the data stays.
+        </p>
+
+        <div id="shared-drive-status" style="font-size:12px;margin-bottom:10px;"></div>
+
+        <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px;">
+          <div style="flex:1;min-width:220px;">
+            <label class="field-label" for="shared-drive-id-input">Shared Drive ID</label>
+            <input type="text" id="shared-drive-id-input" class="api-key-input"
+              placeholder="e.g. 0AbCdEfGhIjKlMnOp..." autocomplete="off">
+          </div>
+          <button class="save-key-btn" id="shared-drive-save-btn" onclick="saveSharedDriveId()">Save</button>
+          <button class="save-key-btn" onclick="openTeamSpreadsheetLink()">Open spreadsheet →</button>
+        </div>
+
+        <div class="api-note">
+          <b>One-time setup (founder/admin does this once):</b>
+          1) In Google Drive, click <b>New → Shared Drive</b>, name it (e.g.
+          "Fundigo Grant Data"), and add your grant team as members.
+          2) Open it — the URL looks like
+          <code style="background:var(--c-soft);color:var(--c-deep);padding:1px 5px;border-radius:4px;">drive.google.com/drive/folders/&lt;ID&gt;</code>
+          — copy the <code style="background:var(--c-soft);color:var(--c-deep);padding:1px 5px;border-radius:4px;">&lt;ID&gt;</code> part.
+          3) Paste it above and click Save. The team spreadsheet is created
+          inside it automatically the first time anyone loads data.
+        </div>
+      </div>
+
+      <div class="settings-panel">
+        <h2>Groq API key</h2>
+        <p class="settings-panel-desc">Stored in session memory only — cleared when you close this tab. Never saved to disk or sent anywhere except Groq's API.</p>
+        <div class="api-key-row">
+          <div style="flex:1;">
+            <label class="field-label" for="api-key-input">Groq API key</label>
+            <input type="password" id="api-key-input" class="api-key-input" placeholder="gsk_..." autocomplete="off">
+          </div>
+          <button class="save-key-btn" onclick="saveApiKey()" style="align-self:flex-end;">Save key</button>
+          <span class="key-status" id="key-status" aria-live="polite">✓ Set</span>
+        </div>
+        <div class="api-note">Get a free key at <a href="https://console.groq.com" target="_blank" rel="noopener" style="color:var(--c-purple);font-weight:600;">console.groq.com</a> — no credit card required. The key starts with <code style="background:var(--c-soft);color:var(--c-deep);padding:1px 5px;border-radius:4px;">gsk_</code>.</div>
+      </div>
+
+      <div class="settings-panel">
+        <h2>Search memory</h2>
+        <p class="settings-panel-desc">The system learns from every run. Known funders are excluded from future searches automatically.</p>
+        <div class="memory-stats-grid">
+          <div class="memory-stat"><div class="memory-stat-n" id="mem-known">0</div><div class="memory-stat-l">Known funders</div></div>
+          <div class="memory-stat"><div class="memory-stat-n" id="mem-dead">0</div><div class="memory-stat-l">Dead URLs cached</div></div>
+          <div class="memory-stat"><div class="memory-stat-n" id="mem-verified">0</div><div class="memory-stat-l">Verified domains</div></div>
+          <div class="memory-stat"><div class="memory-stat-n" id="mem-runs">0</div><div class="memory-stat-l">Runs logged</div></div>
+        </div>
+        <div class="memory-btn-row">
+          <button class="memory-btn" onclick="recheckDeadUrls()"><i class="ti ti-refresh" style="font-size:11px;" aria-hidden="true"></i> Re-check dead URLs</button>
+          <button class="memory-btn" onclick="reverifyDomains()"><i class="ti ti-shield" style="font-size:11px;" aria-hidden="true"></i> Re-verify domains</button>
+          <button class="memory-btn memory-btn-danger" onclick="confirmResetMemory()"><i class="ti ti-trash" style="font-size:11px;" aria-hidden="true"></i> Reset all memory</button>
+        </div>
+      </div>
+
+      <div class="settings-panel">
+        <h2>Organization profile</h2>
+        <p class="settings-panel-desc">This profile powers every discovery search. The more specific, the better the results.</p>
+        <div class="profile-grid">
+          <div class="profile-field"><label class="field-label" for="profile-name">Org name</label><input type="text" id="profile-name" class="profile-input" placeholder="Your organization name"></div>
+          <div class="profile-field"><label class="field-label" for="profile-type">Type</label><input type="text" id="profile-type" class="profile-input" placeholder="501(c)(3) nonprofit"></div>
+          <div class="profile-field full"><label class="field-label" for="profile-mission">Mission</label><textarea id="profile-mission" class="profile-textarea" placeholder="e.g. Free high-quality tutoring for underserved K-12 students"></textarea></div>
+          <div class="profile-field"><label class="field-label" for="profile-locations">Locations</label><input type="text" id="profile-locations" class="profile-input" placeholder="e.g. Illinois, Texas"></div>
+          <div class="profile-field"><label class="field-label" for="profile-grant-range">Grant range sought</label><input type="text" id="profile-grant-range" class="profile-input" placeholder="e.g. $5,000 – $100,000"></div>
+          <div class="profile-field full"><label class="field-label" for="profile-focus">Focus areas</label><input type="text" id="profile-focus" class="profile-input" placeholder="e.g. Education equity, culturally responsive teaching, achievement gap"></div>
+          <div class="profile-field full"><label class="field-label" for="profile-population">Population served</label><input type="text" id="profile-population" class="profile-input" placeholder="e.g. Low-income K-12 students from underrepresented communities"></div>
+          <div class="profile-field full"><label class="field-label" for="profile-exclude">Exclude known funders (comma-separated)</label><input type="text" id="profile-exclude" class="profile-input" placeholder="e.g. Chicago Community Trust, Polk Bros Foundation"></div>
+        </div>
+        <button class="save-profile-btn" onclick="saveProfileFromForm()">Save profile</button>
+      </div>
+
+    </div><!-- /tab-settings -->
+
+  </main>
+
+  <!-- APP FOOTER -->
+  <footer class="app-footer">
+    <a class="app-footer-logo" href="index.html">
+      <svg width="22" height="22" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="lg-af" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+        <rect width="80" height="80" rx="18" fill="url(#lg-af)"/>
+        <line x1="40" y1="33" x2="40" y2="18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="40" y1="47" x2="40" y2="62" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="33" y1="40" x2="18" y2="40" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <line x1="47" y1="40" x2="62" y2="40" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+        <circle cx="40" cy="40" r="6.5" fill="#fff"/><circle cx="40" cy="40" r="3" fill="url(#lg-af)"/>
+      </svg>
+      <div class="app-footer-name">Fundi<span>go</span></div>
+    </a>
+    <div class="app-footer-links">
+      <a href="index.html">Home</a>
+      <a href="faq.html">Help</a>
+      <a href="https://www.linkedin.com/in/madhudevi/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://mdevi25.github.io/" target="_blank" rel="noopener">Portfolio</a>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+      <div class="app-footer-badge">$0.00 / mo</div>
+      <div style="font-size:10px;color:#6B7280;">© 2026 Madhu Devi. All rights reserved.</div>
+    </div>
+  </footer>
+</div><!-- /app-shell -->
+</div><!-- /view-app -->
+
+
+<!-- ================================================================
+     SCRIPTS — load order matters
+     config → memory → discovery → linkVerification →
+     qualification → guard → tracker → proposal → app (inline)
+================================================================ -->
+<script src="auth.js"></script>
+<script src="config.js"></script>
+<script src="sheets-storage.js"></script>
+<script src="memory.js"></script>
+<script src="discovery.js"></script>
+<script src="linkVerification.js"></script>
+<script src="matchScoring.js"></script>
+<script src="qualification.js"></script>
+<script src="guard.js"></script>
+<script src="tracker.js"></script>
+<script src="proposal.js"></script>
+
+<script>
+/* ============================================================
+   INLINE APP CONTROLLER
+   View routing, tab switching, UI wiring, network animation.
+   Business logic lives in the loaded JS files above.
+============================================================ */
+
+// ── GLOBALS ───────────────────────────────────────────────────
+let _selectedCategory = null;
+window._currentPipelineResults = [];
+let _toastTimer = null;
+
+// ── VIEW ROUTING ──────────────────────────────────────────────
+async function saveSharedDriveId() {
+  const input = document.getElementById("shared-drive-id-input");
+  const id = input ? input.value.trim() : "";
+  if (!id) { showToast("Enter a Shared Drive ID first."); return; }
+
+  try {
+    await setOrgSharedDrive(id);
+    showToast("Shared Drive saved. Loading your team's data…");
+    await refreshSharedDriveStatus();
+    try { if (typeof loadProfileIntoSettings === 'function') await loadProfileIntoSettings(); } catch(e) {}
+    try { if (typeof initTracker === 'function') await initTracker(); } catch(e) {}
+  } catch (err) {
+    if (err.code === "NOT_AUTHORIZED") {
+      showToast(`Only ${err.configuredBy || "your org's admin"} can change this — ask them to update it.`);
+    } else {
+      showToast("Could not save Shared Drive ID: " + err.message);
+    }
+  }
+}
+
+async function refreshSharedDriveStatus() {
+  const el = document.getElementById("shared-drive-status");
+  const input = document.getElementById("shared-drive-id-input");
+  const saveBtn = document.getElementById("shared-drive-save-btn");
+  if (!el) return;
+  const user = getSignedInUser();
+  const domain = (user?.email || "").split("@")[1] || "";
+  const publicDomains = ["gmail.com","googlemail.com","yahoo.com","outlook.com",
+    "hotmail.com","live.com","icloud.com","aol.com","protonmail.com"];
+  if (publicDomains.includes(domain)) {
+    el.innerHTML = `<span style="color:var(--c-muted);">Personal account (${esc(user.email)}) — Shared Drives are for org domains only. Your data stays private to you.</span>`;
+    return;
+  }
+  try {
+    const status = await getOrgPointerStatus();
+    const isAdmin = !status.configuredBy || status.configuredBy === user.email;
+
+    if (!status.sharedDriveId) {
+      el.innerHTML = `<span style="color:#B45309;">⚠️ Not configured yet — set it up below so your team shares one dataset.</span>`;
+    } else if (!status.spreadsheetId) {
+      el.innerHTML = `<span style="color:#166534;">✓ Shared Drive connected${status.configuredBy ? ` (set up by ${esc(status.configuredBy)})` : ""} — spreadsheet will be created on first use.</span>`;
+    } else {
+      const when = status.configuredAt ? new Date(status.configuredAt).toLocaleDateString() : "";
+      el.innerHTML = `<span style="color:#166534;">✓ Connected — your whole @${esc(domain)} team shares this data.${status.configuredBy ? ` Set up by ${esc(status.configuredBy)}${when ? ' on ' + when : ''}.` : ""}</span>`;
+    }
+
+    // Only the admin (whoever configured it, or nobody yet) can edit.
+    // The server enforces this for real — this is just so a non-admin
+    // doesn't fill in a field only to get a rejection on Save.
+    if (input) {
+      input.disabled = !isAdmin;
+      input.placeholder = isAdmin
+        ? "e.g. 0AbCdEfGhIjKlMnOp..."
+        : `Only ${status.configuredBy} can change this`;
+    }
+    if (saveBtn) {
+      saveBtn.disabled = !isAdmin;
+      saveBtn.style.opacity = isAdmin ? "1" : "0.5";
+      saveBtn.style.cursor = isAdmin ? "pointer" : "not-allowed";
+      saveBtn.title = isAdmin ? "" : `Only ${status.configuredBy} can change this`;
+    }
+  } catch (e) {
+    el.innerHTML = `<span style="color:var(--c-muted);">Sign in to check status.</span>`;
+  }
+}
+
+async function openTeamSpreadsheetLink() {
+  try {
+    const link = await getOrgSpreadsheetLink();
+    window.open(link, "_blank", "noopener");
+  } catch (err) {
+    if (err.code === "SHARED_DRIVE_NOT_CONFIGURED") {
+      showToast("Set up a Shared Drive first — see the box above.");
+    } else {
+      showToast("Could not open spreadsheet: " + err.message);
+    }
+  }
+}
+
+function enterApp() {
+  requireSignIn(function (user) {
+    document.body.classList.add('in-app');
+    window.scrollTo(0, 0);
+    if (!window._appInited) {
+      window._appInited = true;
+      // Guard each call — functions defined in loaded JS files
+      try { if (typeof initTracker === 'function') initTracker(); } catch(e) { console.warn('initTracker:', e); }
+      try { if (typeof loadProfileIntoSettings === 'function') loadProfileIntoSettings(); } catch(e) { console.warn('loadProfile:', e); }
+      try { if (typeof updateMemoryStats === 'function') updateMemoryStats(); } catch(e) { console.warn('memStats:', e); }
+      try { if (typeof checkApiKeyStatus === 'function') checkApiKeyStatus(); } catch(e) { console.warn('apiKey:', e); }
+      // window._fundigoOrgInfo is only known after the first real
+      // window.storage.get/set round-trip (in the calls above) —
+      // refresh the header note now that it's available.
+      try { if (typeof renderOrgSharingNote === 'function') renderOrgSharingNote(user); } catch(e) {}
+    }
+  });
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────────
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('tab-active'));
+  document.querySelectorAll('.app-tab').forEach(b => {
+    b.classList.remove('tab-active');
+    b.setAttribute('aria-selected', 'false');
+  });
+  const section = document.getElementById('tab-' + tabId);
+  if (section) section.classList.add('tab-active');
+  btn.classList.add('tab-active');
+  btn.setAttribute('aria-selected', 'true');
+  if (tabId === 'tracker')  { renderTracker(); renderTrackerStats(); checkUpcomingDeadlines(); }
+  if (tabId === 'proposal') { renderProposalTab(); }
+  if (tabId === 'settings') { updateMemoryStats(); loadProfileIntoSettings(); checkApiKeyStatus(); refreshSharedDriveStatus(); }
+  window.scrollTo(0, 0);
+}
+
+// ── RESET SEARCH ─────────────────────────────────────────────
+function resetSearch() {
+  // Clear custom search
+  const input = document.getElementById('custom-search-input');
+  if (input) { input.value = ''; updateCharCount(input); }
+  // Reset chips to Full scan default
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-selected'));
+  const fullChip = document.querySelector('.chip[data-category="all"]');
+  if (fullChip) fullChip.classList.add('chip-selected');
+  _selectedCategory = 'all';
+  // Clear results
+  document.getElementById('results-container').innerHTML = '';
+  document.getElementById('future-container').innerHTML = '';
+  document.getElementById('summary-stats').style.display = 'none';
+  document.getElementById('top-recs').style.display = 'none';
+  document.getElementById('opp-controls').style.display = 'none';
+  document.getElementById('pipeline-bar').style.display = 'none';
+  document.getElementById('status-msg').classList.remove('visible');
+  document.getElementById('discover-empty').style.display = 'block';
+  expandSearchPanel();
+  showToast('Search reset.');
+}
+
+/**
+ * Collapse the search panel into a one-line summary once results are
+ * in. Fires regardless of outcome, qualified matches or none, so
+ * results are always immediately visible without scrolling.
+ */
+function collapseSearchPanel() {
+  const panel = document.getElementById('search-panel');
+  const summaryText = document.getElementById('search-panel-summary-text');
+  if (!panel) return;
+
+  const customQ = document.getElementById('custom-search-input')?.value.trim();
+  let label;
+  if (customQ) {
+    label = customQ.length > 60 ? customQ.slice(0, 60) + '…' : customQ;
+  } else {
+    const selectedChip = document.querySelector('.chip.chip-selected .chip-label');
+    label = selectedChip ? selectedChip.textContent : 'your search';
+  }
+
+  if (summaryText) {
+    summaryText.innerHTML = `<i class="ti ti-search" style="font-size:13px;" aria-hidden="true"></i> Searched: ${esc(label)}`;
+  }
+  panel.classList.add('search-panel-collapsed');
+}
+
+/**
+ * Reverse collapseSearchPanel() — brings back the full chip grid and
+ * custom search box. Triggered by the "Change search" link in the
+ * collapsed summary row, and by Reset.
+ */
+function expandSearchPanel() {
+  const panel = document.getElementById('search-panel');
+  if (panel) panel.classList.remove('search-panel-collapsed');
+}
+
+// ── CHIP SELECTION ─────────────────────────────────────────────────
+function clearChips() {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-selected'));
+  _selectedCategory = null;
+}
+
+function selectChip(el) {
+  const wasSelected = el.classList.contains('chip-selected');
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-selected'));
+  if (wasSelected) {
+    _selectedCategory = null;
+  } else {
+    el.classList.add('chip-selected');
+    _selectedCategory = el.dataset.category || 'all';
+    // Clear custom text — chip takes over
+    const input = document.getElementById('custom-search-input');
+    if (input) { input.value = ''; updateCharCount(input); }
+  }
+}
+
+function updateCharCount(el) {
+  const counter = document.getElementById('char-counter');
+  const n = el.value.length;
+  counter.textContent = n + '/280';
+  counter.className = 'char-counter' + (n > 240 ? ' warn' : '');
+}
+
+// ── DISCOVERY PIPELINE ────────────────────────────────────────
+async function runPipeline() {
+  if (!hasApiKey('groq')) {
+    showToast('Enter your Groq API key in the Settings tab first.');
+    return;
+  }
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2 spin" style="font-size:13px;" aria-hidden="true"></i> Running…';
+
+  document.getElementById('pipeline-bar').style.display = 'flex';
+  document.getElementById('summary-stats').style.display = 'none';
+  document.getElementById('top-recs').style.display = 'none';
+  document.getElementById('opp-controls').style.display = 'none';
+  document.getElementById('results-container').innerHTML = '';
+  document.getElementById('future-container').innerHTML = '';
+  document.getElementById('discover-empty').style.display = 'none';
+
+  const statusMsg  = document.getElementById('status-msg');
+  const statusText = document.getElementById('status-msg-text');
+  function onStatus(msg) { statusMsg.classList.add('visible'); statusText.textContent = msg; }
+  function setPipe(id, state) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('step-done','step-running');
+    if (state) el.classList.add('step-' + state);
+  }
+
+  try {
+    const customQ = document.getElementById('custom-search-input').value.trim();
+
+    if (!_selectedCategory && !customQ) {
+      showToast('Select a category or describe what you need first.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-player-play" style="font-size:13px;" aria-hidden="true"></i> Run search';
+      return;
+    }
+
+    setPipe('pipe-1','running');
+    onStatus('Layer 1 — Searching the web for open grant opportunities…');
+    // Pass custom text if typed, otherwise use the selected chip category.
+    // buildDiscoveryUserPrompt() prioritises customQuery over category.
+    const searchOverride = { category: _selectedCategory || 'all', customQuery: customQ || '' };
+    // runDiscovery() returns { opportunities, futureMonitoring, meta }
+    const discoveryResult = await runDiscovery(onStatus, searchOverride);
+    const discovered = discoveryResult.opportunities || [];
+    const discoveredFuture = discoveryResult.futureMonitoring || [];
+    setPipe('pipe-1','done'); setPipe('pipe-15','running');
+
+    onStatus(`Layer 1.5 — Verifying ${discovered.length} URLs server-side…`);
+    // Layer 1.5 — Skip live URL verification (visit_website drops valid URLs on free tier)
+    // Mark all as NEEDS_CHECK — staff verifies before applying
+    const verified = discovered.map(o => ({ ...o, linkStatus: 'NEEDS_CHECK' }));
+    const linkResult = { verified, dropped: [], meta: { verified: verified.length, dropped: 0 } };
+    onStatus(`Layer 1.5 — ${verified.length} opportunit${verified.length !== 1 ? 'ies' : 'y'} passed for qualification…`);
+    setPipe('pipe-15','done'); setPipe('pipe-2','running');
+
+    // Wait 65 seconds between layers — TPM limit is 8,000/min shared across all models
+    onStatus('Layer 2 — Waiting 65 seconds for rate limit reset before qualifying…');
+    await new Promise(r => setTimeout(r, 65000));
+
+    // runQualification returns { qualified, filtered, meta }
+    const qualResult = await runQualification(verified, onStatus);
+    setPipe('pipe-2','done'); setPipe('pipe-25','running');
+
+    // runGuard returns { checked, meta }
+    const guardResult = await runGuard(qualResult.qualified, onStatus);
+    setPipe('pipe-25','done'); setPipe('pipe-3','running');
+
+    window._currentPipelineResults = guardResult.checked;
+
+    document.getElementById('stat-found').textContent    = discoveryResult.meta?.rawResultCount || discovered.length;
+    document.getElementById('stat-verified').textContent = linkResult.meta?.verified || verified.length;
+    document.getElementById('stat-filtered').textContent = (linkResult.meta?.dropped || 0) + (qualResult.meta?.filteredOut || 0);
+    document.getElementById('stat-avg-fit').textContent  = qualResult.meta.avgFitScore;
+    document.getElementById('stat-highest').textContent  = qualResult.meta.highestAmount || '—';
+    document.getElementById('summary-stats').style.display = 'grid';
+
+    // Top 3 recommendations — inline (renderTopRecommendations does not exist as separate fn)
+    const top3 = guardResult.checked.slice(0, 3);
+    if (top3.length > 0) {
+      document.getElementById('top-recs-content').innerHTML = top3.map((o, i) =>
+        `<div class="top-rec-row">${i+1}. <b>${esc(o.funder)}</b> — ${esc(o.amount||'—')} · ${esc(o.deadline||'—')} · Fit ${o.fitScore||'—'}/5</div>`
+      ).join('');
+      document.getElementById('top-recs').style.display = 'block';
+    }
+
+    renderOpportunityCards(guardResult.checked);
+    renderFutureMonitoring(qualResult.filtered || discoveredFuture || [], guardResult.checked.length === 0);
+
+    if (guardResult.checked.length > 0) document.getElementById('opp-controls').style.display = 'flex';
+    setPipe('pipe-3','done');
+    onStatus(`Done — ${guardResult.checked.length} verified opportunit${guardResult.checked.length !== 1 ? 'ies' : 'y'} found.`);
+
+    // Collapse the search panel once results are in, regardless of
+    // outcome — qualified matches or none. Replaces the earlier
+    // auto-scroll approach entirely; this keeps results visible without
+    // scrolling at all, rather than trying to scroll to the right place.
+    collapseSearchPanel();
+    // Auto-add all found funders to memory so they are excluded next run
+    try {
+      if (typeof addKnownFunder === 'function') {
+        guardResult.checked.forEach(opp => {
+          if (opp.funder) addKnownFunder(opp.funder, 'Discovered', 'auto');
+        });
+      }
+    } catch(e) {}
+    try { if (typeof logRun === 'function') logRun({ category: _selectedCategory, found: discovered.length, verified: verified.length }); } catch(e) {}
+    showToast(`Search complete — ${guardResult.checked.length} opportunities found.`);
+
+  } catch (err) {
+    onStatus('Error: ' + err.message);
+    showToast('Search failed: ' + err.message.slice(0, 80));
+    console.error('Pipeline error:', err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-player-play" style="font-size:13px;" aria-hidden="true"></i> Run search';
+  }
+}
+
+// ── OPPORTUNITY CARDS ─────────────────────────────────────────
+function renderOpportunityCards(opportunities) {
+  const container = document.getElementById('results-container');
+  if (opportunities.length === 0) {
+    container.innerHTML = `<div class="empty-state"><i class="ti ti-search-off" aria-hidden="true"></i><div class="empty-state-title">No verified opportunities found</div><div>Try a different category or broaden your search.</div></div>`;
+    return;
+  }
+  container.innerHTML = opportunities.map((opp, i) => {
+    const isOpen    = i === 0;
+    const isFlagged = opp.guardStatus === 'FLAG';
+    const dl        = deadlineClass(opp.deadline);
+    const dlText    = daysLabel(opp.deadline);
+    const fitDots   = [1,2,3,4,5].map(n => `<span class="fit-dot ${n <= (opp.fitScore||0) ? 'filled' : ''}"></span>`).join('');
+    const isNeedsCheck = !opp.linkStatus || opp.linkStatus === 'NEEDS_CHECK' || opp.linkStatus === 'NEEDS CHECK';
+    const matchLevelClass = { HIGH: 'pill-match-high', GOOD: 'pill-match-good', OK: 'pill-match-ok', NO: 'pill-match-no' }[opp.matchLevel] || '';
+    const pills = [
+      opp.matchLevel ? `<span class="pill ${matchLevelClass}">${esc(opp.matchLevel)} MATCH</span>` : '',
+      opp.appStatus === 'OPEN – Rolling' ? `<span class="pill pill-rolling">Rolling</span>` : `<span class="pill pill-open">${esc(opp.appStatus||'Open')}</span>`,
+      isFlagged ? `<span class="pill pill-flag">⚠ Review</span>` : `<span class="pill pill-pass">✓ Guard</span>`,
+      opp.linkStatus === 'VERIFIED' ? `<span class="pill pill-verified">✓ Verified</span>` : `<span class="pill pill-flag">⚠ Verify URL</span>`,
+    ].filter(Boolean).join('');
+    return `
+      <div class="opp-card ${isFlagged ? 'opp-flagged' : ''} ${isOpen ? 'opp-open' : ''}" id="opp-${esc(opp.id)}">
+        <div class="opp-card-header" onclick="toggleOppCard('opp-${esc(opp.id)}')" role="button" aria-expanded="${isOpen}">
+          <div style="flex:1;min-width:0;">
+            <div class="opp-card-name">${esc(opp.funder)}</div>
+            <div class="opp-card-prog">${esc(opp.program)}</div>
+          </div>
+          <div class="opp-card-pills">${pills}</div>
+          <div class="opp-card-summary">
+            <div><span class="sum-k">Amount</span><span class="sum-v">${esc(opp.amount||'—')}</span></div>
+            <div><span class="sum-k">Deadline</span><span class="sum-v"><span class="${dl}">${esc(dlText||opp.deadline||'—')}</span></span></div>
+            <div><span class="sum-k">Fit</span><span class="sum-v"><span class="fit-dots">${fitDots}</span></span></div>
+          </div>
+          <i class="ti ti-chevron-down opp-chevron" aria-hidden="true"></i>
+        </div>
+        <div class="opp-card-body">
+          ${opp.whyQualifies ? `<div class="opp-why">${esc(opp.whyQualifies)}</div>` : ''}
+          ${isNeedsCheck ? `<div class="opp-guard-flag">⚠ URL not verified — the link below may redirect or return a 404. Visit the funder's homepage directly and search for this grant before applying.</div>` : ''}
+          ${isFlagged && opp.guardNote ? `<div class="opp-guard-flag">⚠ ${esc(opp.guardNote)}</div>` : ''}
+          <div class="opp-foot">
+            ${opp.finalUrl||opp.url
+              ? `<a href="${esc(opp.finalUrl||opp.url)}" class="opp-link" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px;vertical-align:-1px;" aria-hidden="true"></i> Open application</a>`
+              : `<span class="opp-link" style="color:var(--c-faint);">No URL available</span>`}
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="verified-note">Verified ${esc(opp.dateVerified||today())} · <b>${esc(opp.recommendedAction||'—')}</b></span>
+              <button class="add-to-tracker-btn" onclick="addOpportunityToTracker('${esc(opp.id)}')">
+                <i class="ti ti-plus" style="font-size:11px;" aria-hidden="true"></i> Add to tracker
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleOppCard(cardId) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const isOpen = card.classList.toggle('opp-open');
+  card.querySelector('.opp-card-header').setAttribute('aria-expanded', String(isOpen));
+}
+function expandAllOpps()  { document.querySelectorAll('.opp-card').forEach(c => { c.classList.add('opp-open');    c.querySelector('.opp-card-header')?.setAttribute('aria-expanded','true'); }); }
+function collapseAllOpps(){ document.querySelectorAll('.opp-card').forEach(c => { c.classList.remove('opp-open'); c.querySelector('.opp-card-header')?.setAttribute('aria-expanded','false'); }); }
+
+// Classifies one extracted fact as favorable/unfavorable for display
+// only. Mirrors the same category values matchScoring.js's waterfall
+// checks against — if those categories ever change, update both.
+function classifyFact(kind, value) {
+  const GOOD = {
+    subjectMatch:      ["math_reading", "general_tutoring"],
+    gradeLevelMatch:   ["7-12", "k-12"],
+    geoMatch:          ["tx_il", "us"],
+    nonprofitEligible: [true],
+  };
+  if (GOOD[kind] && GOOD[kind].includes(value)) return "good";
+  if (value === "unclear" || value === "" || value === undefined) return "neutral";
+  return "bad";
+}
+
+function factPillLabel(kind, value) {
+  const labels = {
+    subjectMatch:      { math_reading: "subject: math/reading tutoring", general_tutoring: "subject: general tutoring",
+                          other_education: "subject: other education, not tutoring", none: "subject: not education-related",
+                          unclear: "subject: unclear" },
+    gradeLevelMatch:   { "7-12": "grade: 7-12, on target", "k-12": "grade: K-12, broader than target",
+                          other: "grade: outside K-12", unclear: "grade: unclear" },
+    geoMatch:          { tx_il: "geography: Texas/Illinois, matches", us: "geography: US-wide, not TX/IL specific",
+                          outside_us: "geography: outside the US", unclear: "geography: unclear" },
+    nonprofitEligible: { true: "nonprofit: eligible", false: "nonprofit: not eligible", "": "nonprofit: unclear" },
+  };
+  const key = kind === "nonprofitEligible" ? String(value) : value;
+  return (labels[kind] && labels[kind][key]) || `${kind}: ${value || "unclear"}`;
+}
+
+function renderFutureMonitoring(funders, autoExpand) {
+  const container = document.getElementById('future-container');
+  window._currentFilteredResults = funders || [];
+  if (!funders || funders.length === 0) { container.innerHTML = ''; return; }
+
+  const factKinds = ["subjectMatch", "gradeLevelMatch", "geoMatch", "nonprofitEligible"];
+  const rows = funders.map(f => {
+    const pills = factKinds.map(kind => {
+      const cls = classifyFact(kind, f[kind]);
+      return `<span class="rej-pill rej-pill-${cls}">${esc(factPillLabel(kind, f[kind]))}</span>`;
+    }).join('');
+    return `
+    <div class="future-row" style="flex-direction:column;align-items:stretch;gap:6px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+        <div><div class="future-funder">${esc(f.funder||f.name||'—')}</div><div class="future-why">${esc(f.missionAlignment||f.sourceNote||'')}</div></div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">${pills}</div>
+      <div>
+        <button class="save-key-btn" style="font-size:11.5px;padding:4px 10px;" onclick="addOpportunityToTracker('${esc(f.id)}')">Add anyway <i class="ti ti-arrow-up-right" style="font-size:11px;vertical-align:-1px;" aria-hidden="true"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="future-box${autoExpand ? ' future-open' : ''}" id="future-box">
+      <div class="future-header" onclick="toggleFuture()" role="button" aria-expanded="${autoExpand ? 'true' : 'false'}">
+        <div class="future-label"><i class="ti ti-filter-x" style="font-size:11px;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i> Not a match</div>
+        <span class="future-count">${funders.length} funder${funders.length!==1?'s':''}</span>
+        <i class="ti ti-chevron-down future-chevron" aria-hidden="true"></i>
+      </div>
+      <div style="padding:0 14px 10px;font-size:11.5px;color:var(--c-muted);cursor:pointer;" onclick="toggleFuture()">Scored below your criteria. Review why, and add it anyway if it's worth a second look.</div>
+      <div class="future-body">
+        ${rows}
+      </div>
+    </div>`;
+}
+function toggleFuture() {
+  const box = document.getElementById('future-box');
+  if (!box) return;
+  const isOpen = box.classList.toggle('future-open');
+  box.querySelector('.future-header').setAttribute('aria-expanded', String(isOpen));
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────
+function saveApiKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (!val) { showToast('Enter a valid Groq API key first.'); return; }
+  if (!val.startsWith('gsk_')) { showToast('Groq keys start with gsk_ — double-check and try again.'); return; }
+  // Use same key name as config.js: ere_key_groq
+  sessionStorage.setItem('ere_key_groq', val);
+  document.getElementById('key-status').classList.add('visible');
+  showToast('API key saved for this session.');
+}
+function checkApiKeyStatus() {
+  try {
+    const key = sessionStorage.getItem('ere_key_groq');
+    if (key) {
+      const inp = document.getElementById('api-key-input');
+      const sts = document.getElementById('key-status');
+      if (inp) inp.value = key;
+      if (sts) sts.classList.add('visible');
+    }
+  } catch(e) { console.warn('apiKey:', e.message); }
+}
+async function loadProfileIntoSettings() {
+  const p = await loadProfile();
+  setValue('profile-name',        p.name       || '');
+  setValue('profile-type',        p.type       || '');
+  setValue('profile-mission',     p.mission    || '');
+  setValue('profile-locations',   p.locations  || '');
+  setValue('profile-grant-range', p.grantRange || '');
+  setValue('profile-focus',       Array.isArray(p.focus) ? p.focus.join(', ') : (p.focus||''));
+  setValue('profile-population',  p.population || '');
+  setValue('profile-exclude',     (p.excludeFunders||[]).join(', '));
+}
+async function saveProfileFromForm() {
+  await saveProfile({
+    name:           getValue('profile-name'),
+    type:           getValue('profile-type'),
+    mission:        getValue('profile-mission'),
+    locations:      getValue('profile-locations'),
+    grantRange:     getValue('profile-grant-range'),
+    focus:          getValue('profile-focus'),        // kept as string — discovery.js splits it
+    population:     getValue('profile-population'),
+    excludeFunders: getValue('profile-exclude'),      // kept as string — discovery.js splits it
+  });
+  showToast('Profile saved.');
+}
+function updateMemoryStats() {
+  try {
+    if (typeof getMemoryStats !== 'function') return;
+    const s = getMemoryStats();
+    setTextContent('mem-known',    s.knownFunderCount    || 0);
+    setTextContent('mem-dead',     s.deadUrlCount        || 0);
+    setTextContent('mem-verified', s.verifiedDomainCount || 0);
+    setTextContent('mem-runs',     s.totalRunCount       || 0);
+  } catch(e) { console.warn('Memory stats not ready:', e.message); }
+}
+function confirmResetMemory() {
+  if (!confirm('Reset all search memory?\n\nThis clears known funders, dead URL cache, and verified domains. Your tracker data is not affected.')) return;
+  clearAllMemory(); updateMemoryStats(); showToast('Memory reset. Next search starts fresh.');
+}
+function recheckDeadUrls()   { clearDeadUrls();          updateMemoryStats(); showToast('Dead URL cache cleared.'); }
+function reverifyDomains()   { clearVerifiedDomains();   updateMemoryStats(); showToast('Domain cache cleared.'); }
+
+// ── ABOUT ACCORDION ───────────────────────────────────────────
+function toggleAcc(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('acc-open');
+  btn.classList.toggle('acc-open', !isOpen);
+  body.classList.toggle('acc-open', !isOpen);
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(message, duration = 3000) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = message;
+  el.classList.add('toast-visible');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('toast-visible'), duration);
+}
+
+// ── DOM HELPERS ───────────────────────────────────────────────
+function setValue(id, val)      { const el = document.getElementById(id); if (el) el.value = val; }
+function getValue(id)           { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function setTextContent(id,val) { const el = document.getElementById(id); if (el) el.textContent = String(val); }
+
+// ── NETWORK ANIMATION ───────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('network-canvas');
+  if (!canvas) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = canvas.getContext('2d');
+  let nodes = [], W = 0, H = 0;
+  function resize() { const r = canvas.parentElement.getBoundingClientRect(); W = canvas.width = r.width||720; H = canvas.height = r.height||480; }
+  function initNodes() { nodes = []; for (let i=0;i<28;i++) nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:2+Math.random()*3}); }
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    const MAX=130;
+    nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;});
+    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<MAX){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(124,58,237,${.18*(1-d/MAX)})`;ctx.lineWidth=.8;ctx.stroke();}}
+    nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(124,58,237,0.25)';ctx.fill();});
+    requestAnimationFrame(draw);
+  }
+  resize(); initNodes(); draw();
+  window.addEventListener('resize',()=>{resize();initNodes();});
+})();
+</script>
+
+</body>
+</html>
