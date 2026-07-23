@@ -1,17 +1,17 @@
-# Fundigo — AI-Powered Grant Intelligence for Nonprofits
+# Fundigo - AI Powered Grant Intelligence for Nonprofits
 
 > Built July 2026 · by Madhu Devi
 > [github.com/mdevi25/fundigo-gip](https://github.com/mdevi25/fundigo-gip)
 
 **Find the grants your mission deserves.**
 
-Fundigo is a free, browser-based AI pipeline that helps small nonprofits discover, verify, score, and track open grant opportunities — at zero cost, with humans in control at every step.
+Fundigo is a free, browser-based AI pipeline that helps small nonprofits discover, verify, score, and track open grant opportunities, at zero cost, with humans in control at every step.
 
 ---
 
 ## The Problem
 
-Small nonprofits often have no dedicated grant staff. Manual grant searching wastes hours. Known funders get exhausted. New opportunities — especially from smaller foundations and corporate programs — are nearly impossible to surface without specialized tools costing hundreds of dollars a month.
+Small nonprofits often have no dedicated grant staff. Manual grant searching wastes hours. Known funders get exhausted. New opportunities, especially from smaller foundations and corporate programs, are nearly impossible to surface without specialized tools costing hundreds of dollars a month.
 
 Fundigo solves this with one free Groq API key, a Google account, and 30 minutes a week.
 
@@ -21,11 +21,11 @@ Fundigo solves this with one free Groq API key, a Google account, and 30 minutes
 
 **[mdevi25.github.io/fundigo-gip](https://mdevi25.github.io/fundigo-gip/)**
 
-Sign in with Google to use it. Grant data lives in your own org's Google Sheet inside a Shared Drive your organization owns — never on any third-party server.
+Sign in with Google to use it. Grant data lives in your own org's Google Sheet inside a Shared Drive your organization owns, never on any third-party server.
 
 ---
 
-## How It Works — 5-Stage Pipeline
+## How It Works: 5-Stage Pipeline
 
 ```
 Org Profile
@@ -35,11 +35,11 @@ Discover           compound-beta-mini (live web search, 1 result/run)
 Verify link        groq/compound + visit_website (real server-side check,
                     dead/unreachable URLs are dropped before qualification)
     ↓
-Qualify             gpt-oss-120b — extracts facts only (subject, grade
+Qualify             gpt-oss-120b: extracts facts only (subject, grade
                     level, geography, nonprofit eligibility). Never
                     decides a tier itself.
     ↓
-Match score          Deterministic code, no AI — applies the org's own
+Match score          Deterministic code, no AI: applies the org's own
                     criteria to those facts, returns HIGH / GOOD / OK / NO
     ↓
 Guard               gpt-oss-safeguard-20b (bias + accuracy check, soft-flag only)
@@ -60,15 +60,15 @@ Every result that reaches staff has passed every stage. AI reads and drafts. Det
 | Stage | What runs it | What makes the decision |
 |---|---|---|
 | Discover | `compound-beta-mini` | AI, searches the live web |
-| Verify link | `groq/compound` + `visit_website` | AI, real server-side check — dead links are actually dropped, not just flagged |
-| Qualify | `gpt-oss-120b` | AI, but only extracts facts — never decides fit |
+| Verify link | `groq/compound` + `visit_website` | AI, real server-side check. Dead links are actually dropped, not just flagged |
+| Qualify | `gpt-oss-120b` | AI, but only extracts facts, never decides fit |
 | Match score | Plain JavaScript | **No AI.** A deterministic function applies the org's own criteria to the facts above |
 | Guard | `gpt-oss-safeguard-20b` | AI, soft-flag only, never hard-blocks |
 | Tracker | Google Sheets API | Written directly from the browser to the org's own Sheet |
 | Proposal | Google NotebookLM | Drafts from uploaded org documents only |
 | Human | Staff | Reviews, edits, approves, and submits every application |
 
-The AI-decides-the-tier-directly approach was deliberately abandoned partway through this project after real-world testing showed it could rank things inconsistently. Splitting "read the facts" (AI) from "apply the criteria" (code) makes every match explainable and repeatable — the same facts always produce the same tier.
+The approach of letting AI decide the tier directly was deliberately abandoned partway through this project after real-world testing showed it could rank things inconsistently. Splitting "read the facts" (AI) from "apply the criteria" (code) makes every match explainable and repeatable: the same facts always produce the same tier.
 
 ---
 
@@ -80,24 +80,18 @@ The AI-decides-the-tier-directly approach was deliberately abandoned partway thr
 - Memory layer automatically excludes already-known funders
 
 ### Link Verification
-- Every URL checked server-side — dead links, login walls, and unreachable pages are genuinely dropped before they reach qualification
+- Every URL checked server-side: dead links, login walls, and unreachable pages are genuinely dropped before they reach qualification
 - Dead URLs and verified domains cached to avoid re-checking unnecessarily
-
-### Qualification & Match Scoring
-- The AI extracts plain facts about each grant: subject area, grade level served, geography, nonprofit eligibility
-- A separate, deterministic function applies the org's actual criteria to those facts and returns one of four tiers: **HIGH / GOOD / OK / NO**
-- No AI involvement in the tier decision itself — this is the layer that makes results explainable, not just plausible-sounding
-- Anything scoring below the org's threshold is filtered into a **"Not a match"** panel, showing exactly which fact caused the rejection, with an option to add it anyway if a human disagrees
 
 ### Guardrails
 - `openai/gpt-oss-safeguard-20b` checks language quality, bias, and accuracy
-- Soft-flag mode only — AI never hard-blocks. Staff always makes the final call
+- Soft-flag mode only. AI never hard-blocks; staff always makes the final call
 
 ### Grant Tracker
-- Inline editable table — click any cell to update
+- Inline editable table: click any cell to update
 - Status options: New / Pursue / Submitted / Funded / Declined / Not Eligible / Defer
-- Data lives in a Google Sheet inside the org's own Shared Drive — not on any third-party server, and not tied to any one person's personal account
-- If a volunteer who's part of the team leaves, removing them from the Shared Drive's membership is all that's needed — the data stays
+- Data lives in a Google Sheet inside the org's own Shared Drive, not on any third-party server, and not tied to any one person's personal account
+- If a volunteer who's part of the team leaves, removing them from the Shared Drive's membership is all that's needed. The data stays
 
 ### Memory System
 - Every funder found by discovery is automatically added to memory after each run, building the exclude list for future searches
@@ -105,7 +99,7 @@ The AI-decides-the-tier-directly approach was deliberately abandoned partway thr
 
 ### Proposal Bridge
 - Selects an opportunity from the tracker and generates a tailored NotebookLM prompt
-- Instructs NotebookLM to draft from uploaded org documents only — every missing piece marked `[INSERT: ...]`, nothing invented
+- Instructs NotebookLM to draft from uploaded org documents only. Every missing piece marked `[INSERT: ...]`, nothing invented
 
 ---
 
@@ -120,7 +114,7 @@ The AI-decides-the-tier-directly approach was deliberately abandoned partway thr
 | Google NotebookLM | Proposal drafting | Free | No |
 | Google Sheets & Drive | Grant data storage, org-owned | Free | No |
 | GitHub Pages | Static site hosting | Free | No |
-| Google Cloud Functions + Firestore | The one small server-side piece — stores a two-string pointer per org, never actual grant data | Free tier, generous for this scale | Yes, to activate the free tier, no charges expected |
+| Google Cloud Functions + Firestore | The one small server-side piece, stores a two-string pointer per org, never actual grant data | Free tier, generous for this scale | Yes, to activate the free tier, no charges expected |
 
 Limits reset automatically. One run uses a small fraction of the daily free allowance.
 
@@ -128,7 +122,7 @@ Limits reset automatically. One run uses a small fraction of the daily free allo
 
 ## Getting Started
 
-Setup for a new organization involves a few one-time steps — Google Cloud Console configuration, a Shared Drive for the org's data, and a few environment variables. This isn't a five-minute drag-and-drop deploy anymore, since the architecture prioritizes org data ownership over setup speed.
+Setup for a new organization involves a few one-time steps: Google Cloud Console configuration, a Shared Drive for the org's data, and a few environment variables. This isn't a five-minute drag-and-drop deploy anymore, since the architecture prioritizes org data ownership over setup speed.
 
 Full setup instructions are maintained separately, not in this public repo, to keep configuration details out of public view.
 
