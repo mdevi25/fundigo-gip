@@ -3,25 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fundigo — AI-Powered Grant Discovery</title>
+  <title>Fundigo - AI Powered Grant Intelligence</title>
   <meta name="description" content="AI-powered grant intelligence for nonprofits. 5-layer pipeline. Verified leads. Human in control.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
   <link rel="stylesheet" href="styles.css">
   <style>
     :root{
-      --c-bg:#F8F7FF;
-      --c-border:#DDD8F0;
-      --c-purple:#7C3AED;
-      --c-deep:#5B21B6;
-      --c-tint:#F5F3FF;
-      --c-soft:#EDE9FE;
-      --c-text:#1E1B2E;
-      --c-muted:#6B7280;
-      --c-faint:#9CA3AF;
+      --c-bg:#08101e;
+      --c-border:rgba(232,240,252,.08);
+      --c-purple:#2dd4bf;
+      --c-deep:#22b8a0;
+      --c-tint:rgba(45,212,191,.07);
+      --c-soft:rgba(45,212,191,.16);
+      --c-text:#e8f0fc;
+      --c-muted:rgba(232,240,252,.48);
+      --c-faint:rgba(232,240,252,.28);
       --fs-base:13px;
       --fs-sm:12px;
       --fs-xs:11px;
-      --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --font-sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      /* styles.css token overrides */
+      --ink:#e8f0fc;
+      --purple:#2dd4bf;
+      --purple-deep:#22b8a0;
+      --purple-soft:#2dd4bf;
+      --purple-tint:rgba(45,212,191,.07);
+      --gold:#2dd4bf;
+      --gold-soft:rgba(45,212,191,.1);
+      --gold-deep:#22b8a0;
+      --paper:#0b1423;
+      --panel:#0d1829;
+      --line:rgba(232,240,252,.08);
+      --line-soft:rgba(232,240,252,.06);
+      --muted:rgba(232,240,252,.48);
+      --muted-light:rgba(232,240,252,.28);
+      --teal:#2dd4bf;
+      --teal-soft:rgba(45,212,191,.1);
+      --green:#5de396;
+      --green-soft:rgba(93,227,150,.12);
+      --red:#f87171;
+      --red-soft:rgba(248,113,113,.12);
+      --amber:#2dd4bf;
+      --amber-soft:rgba(45,212,191,.12);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html,body{scroll-behavior:smooth;margin:0;padding:0;overflow-x:hidden;height:100%;}
@@ -39,7 +65,7 @@
     .landing-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:var(--c-bg);border-bottom:0.5px solid var(--c-border);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px;}
     .landing-nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
     .landing-nav-name{font-size:16px;font-weight:600;color:var(--c-text);letter-spacing:-.02em;}
-    .landing-nav-name span{color:var(--c-purple);}
+    .landing-nav-name span{color:#2dd4bf;}
     .landing-nav-links{display:flex;align-items:center;gap:20px;}
     .landing-nav-links a{font-size:12.5px;color:var(--c-muted);text-decoration:none;font-weight:500;transition:color .15s;}
     .landing-nav-links a:hover{color:var(--c-purple);}
@@ -48,7 +74,7 @@
 
     /* ── HERO ── */
     .hero{position:relative;min-height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 32px 20px;overflow:hidden;}
-    #network-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.35;}
+    #network-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.6;}
     .hero-content{position:relative;z-index:2;max-width:580px;}
     .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--c-soft);color:var(--c-deep);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:20px;letter-spacing:.04em;text-transform:uppercase;}
     .hero-title{font-size:36px;font-weight:500;color:var(--c-text);line-height:1.2;margin-bottom:16px;letter-spacing:-.02em;}
@@ -61,11 +87,11 @@
     .hero-note span{color:var(--c-purple);font-weight:600;}
 
     /* ── STATS STRIP ── */
-    .stats-strip{display:flex;justify-content:center;border-top:0.5px solid var(--c-border);border-bottom:0.5px solid var(--c-border);background:#fff;}
-    .stats-strip-item{flex:1;max-width:200px;text-align:center;padding:12px 16px;border-right:0.5px solid var(--c-border);}
+    .stats-strip{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--c-border);border-bottom:1px solid var(--c-border);background:var(--c-bg);}
+    .stats-strip-item{text-align:left;padding:28px 36px;border-right:1px solid var(--c-border);}
     .stats-strip-item:last-child{border-right:none;}
-    .stats-strip-n{font-size:20px;font-weight:500;color:var(--c-deep);}
-    .stats-strip-l{font-size:11px;color:var(--c-muted);margin-top:2px;line-height:1.4;}
+    .stats-strip-n{font-family:"Syne",sans-serif;font-size:38px;font-weight:700;color:var(--c-purple);letter-spacing:-1.5px;line-height:1;}
+    .stats-strip-l{font-size:13px;color:var(--c-muted);margin-top:6px;line-height:1.4;}
 
     /* ── FEATURES ── */
     .features-section{padding:48px 32px;max-width:900px;margin:0 auto;}
@@ -78,9 +104,9 @@
     .feature-card-desc{font-size:12px;color:var(--c-muted);line-height:1.55;}
 
     /* ── HOW IT WORKS ── */
-    .how-section{padding:0 32px 0;max-width:900px;margin:0 auto;}
-    .how-title{text-align:center;font-size:20px;font-weight:500;color:var(--c-text);margin-bottom:4px;}
-    .how-sub{text-align:center;font-size:13px;color:var(--c-muted);margin-bottom:16px;}
+    .how-section{padding:48px 52px;max-width:none;margin:0;}
+    .how-sec-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--c-purple);margin-bottom:12px;display:block;}.how-title{text-align:left;font-family:"DM Serif Display",serif;font-size:40px;font-weight:400;color:var(--c-text);margin-bottom:4px;letter-spacing:-.5px;}
+    .how-sub{text-align:left;font-size:15px;color:var(--c-muted);margin-bottom:40px;}
     .how-steps{display:flex;align-items:flex-start;justify-content:center;}
     .how-step{flex:1;text-align:center;padding:0 10px;position:relative;}
     .how-step:not(:last-child)::after{content:"→";position:absolute;right:-8px;top:18px;color:var(--c-border);font-size:18px;}
@@ -115,7 +141,7 @@
     .app-hdr-title{font-size:15px;font-weight:600;color:var(--c-text);letter-spacing:-.015em;}
     .app-hdr-title span{color:var(--c-purple);}
     .app-hdr-sub{font-size:11px;color:var(--c-muted);margin-top:1px;}
-    .app-hdr-badge{font-size:10px;font-weight:700;background:#F0FDF4;color:#166534;border:1px solid #86EFAC;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+    .app-hdr-badge{font-size:10px;font-weight:700;background:rgba(45,212,191,.12);color:#2dd4bf;border:1px solid rgba(45,212,191,.3);padding:3px 9px;border-radius:20px;white-space:nowrap;}
     .app-tabs{display:flex;gap:0;border-bottom:1.5px solid var(--c-border);}
     .app-tab{background:none;border:none;color:var(--c-muted);font-size:12px;font-weight:600;padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent;position:relative;top:1.5px;font-family:var(--font-sans);}
     .app-tab:hover{color:var(--c-text);}
@@ -339,6 +365,227 @@
     @media(prefers-reduced-motion:reduce){
       .start-btn,.pipeline-step,.spin{transition:none;animation:none;}
     }
+
+    /* ── 4A DEEP NAVY + TEAL OVERRIDES ── */
+    .landing-nav-sub{font-size:10px;color:rgba(232,240,252,.4);margin-top:1px;letter-spacing:.01em;}
+    .stats-strip{background:#0b1423;}
+    .stats-strip-item{border-right-color:rgba(232,240,252,.08);}
+    .stats-strip-n{color:#2dd4bf;font-weight:600;}
+    .stats-strip-l{color:rgba(232,240,252,.45);}
+    .how-title{color:#e8f0fc;}
+    .how-sub{color:rgba(232,240,252,.5);}
+    .how-step-num{background:linear-gradient(135deg,#22b8a0,#2dd4bf);}
+    .how-step-title{color:#e8f0fc;}
+    .how-step-desc{color:rgba(232,240,252,.5);}
+    .how-step:not(:last-child)::after{color:rgba(232,240,252,.2);}
+    .hero{background:#08101e;}
+    .hero-title{color:#e8f0fc;}
+    .hero-title b{color:#2dd4bf;}
+    .hero-sub{color:rgba(232,240,252,.55);}
+    .hero-eyebrow{background:rgba(45,212,191,.15);color:#2dd4bf;}
+    .hero-note{color:rgba(232,240,252,.3);}
+    .hero-note span{color:#2dd4bf;}
+    .start-btn{background:linear-gradient(135deg,#22b8a0,#2dd4bf);box-shadow:0 4px 20px rgba(45,212,191,.3);}
+    .start-btn:hover{box-shadow:0 8px 28px rgba(45,212,191,.45);}
+    .search-panel{background:#0d1829;border-color:rgba(232,240,252,.08);}
+    .search-panel h2{color:#e8f0fc;}
+    .search-panel-desc{color:rgba(232,240,252,.45);}
+    .search-panel-summary-text{color:rgba(232,240,252,.5);}
+    .chip{background:#08101e;border-color:rgba(232,240,252,.1);}
+    .chip:hover,.chip.chip-selected{border-color:#2dd4bf;background:rgba(45,212,191,.07);}
+    .chip.chip-full{border-color:#2dd4bf !important;background:rgba(45,212,191,.06) !important;}
+    .chip-label{color:#e8f0fc;}
+    .chip-desc{color:rgba(232,240,252,.45);}
+    .custom-search-label{color:rgba(232,240,252,.4);}
+    .custom-search-input{background:#08101e;border-color:rgba(232,240,252,.12);color:#e8f0fc;}
+    .custom-search-input:focus{border-color:#2dd4bf;outline:none;}
+    .run-btn{background:#2dd4bf;color:#08101e;font-weight:700;}
+    .run-btn:hover{background:#22b8a0;}
+    .run-btn:disabled{background:rgba(45,212,191,.35);}
+    .search-hint{color:rgba(232,240,252,.28);}
+    .opp-ctrl-btn{background:transparent;border-color:rgba(232,240,252,.1);color:rgba(232,240,252,.5);}
+    .opp-ctrl-btn:hover{background:rgba(45,212,191,.06);color:#2dd4bf;}
+    .status-msg{background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.2);color:#2dd4bf;}
+    .pipeline-step{background:#0b1423;border-color:rgba(232,240,252,.1);color:rgba(232,240,252,.45);}
+    .pipeline-step.step-done{background:rgba(45,212,191,.12);border-color:#2dd4bf;color:#2dd4bf;}
+    .pipeline-step.step-running{background:rgba(45,212,191,.15);border-color:#2dd4bf;color:#2dd4bf;animation:pulse 1.5s ease-in-out infinite;}
+    .pipeline-arrow{color:rgba(232,240,252,.2);}
+    .summary-stat{background:#0d1829;border-color:rgba(232,240,252,.08);}
+    .summary-stat-n{color:#2dd4bf;}
+    .summary-stat-l{color:rgba(232,240,252,.4);}
+    .top-recs{background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.15);border-left-color:#2dd4bf;}
+    .top-recs-title{color:#2dd4bf;}
+    .top-rec-row{color:rgba(232,240,252,.7);}
+    .opp-card{background:#0d1829;border-color:rgba(232,240,252,.08);}
+    .opp-card:hover{box-shadow:0 2px 12px rgba(45,212,191,.1);}
+    .opp-card.opp-flagged{border-left-color:#2dd4bf;background:rgba(45,212,191,.05);}
+    .opp-card-header:hover{background:rgba(45,212,191,.04);}
+    .opp-card-name{color:#e8f0fc;}
+    .opp-card-prog{color:rgba(232,240,252,.4);}
+    .sum-k{color:rgba(232,240,252,.35);}
+    .sum-v{color:#e8f0fc;}
+    .opp-chevron{color:rgba(232,240,252,.35);}
+    .opp-card-body{border-top-color:rgba(232,240,252,.07);}
+    .opp-why{background:rgba(45,212,191,.07);color:rgba(232,240,252,.8);}
+    .opp-guard-flag{background:rgba(45,212,191,.09);border-left-color:#2dd4bf;color:rgba(45,212,191,.9);}
+    .opp-link{color:#2dd4bf;}
+    .verified-note{color:rgba(232,240,252,.35);}
+    .add-to-tracker-btn{background:#2dd4bf;color:#08101e;font-weight:700;}
+    .add-to-tracker-btn:hover{background:#22b8a0;}
+    .fit-dot.filled{background:#2dd4bf;}
+    .fit-dots.score-5 .fit-dot.filled{background:#2dd4bf;}
+    .pill{background:rgba(232,240,252,.08);color:rgba(232,240,252,.6);}
+    .pill-open{background:rgba(93,227,150,.15);color:#5de396;}
+    .pill-rolling{background:rgba(125,211,252,.12);color:#7dd3fc;}
+    .pill-pass{background:rgba(93,227,150,.15);color:#5de396;}
+    .pill-flag{background:rgba(45,212,191,.15);color:#2dd4bf;}
+    .pill-verified{background:rgba(45,212,191,.12);color:#2dd4bf;}
+    .pill-match-high{background:rgba(45,212,191,.15);color:#2dd4bf;}
+    .pill-match-good{background:rgba(93,227,150,.15);color:#5de396;}
+    .pill-match-ok{background:rgba(45,212,191,.12);color:#2dd4bf;}
+    .pill-match-no{background:rgba(248,113,113,.15);color:#f87171;}
+    .dl-urgent{background:rgba(248,113,113,.18);color:#f87171;}
+    .dl-soon{background:rgba(45,212,191,.18);color:#2dd4bf;}
+    .dl-ok{background:rgba(93,227,150,.15);color:#5de396;}
+    .dl-roll{background:rgba(232,240,252,.07);color:rgba(232,240,252,.4);}
+    .future-box{background:#0b1423;border-color:rgba(232,240,252,.08);}
+    .future-header:hover{background:rgba(45,212,191,.04);}
+    .future-label{color:rgba(232,240,252,.45);}
+    .future-count{background:rgba(45,212,191,.15);color:#2dd4bf;}
+    .future-chevron{color:rgba(232,240,252,.35);}
+    .future-body{border-top-color:rgba(232,240,252,.07);}
+    .future-row{border-bottom-color:rgba(232,240,252,.06);}
+    .future-funder{color:#e8f0fc;}
+    .future-why{color:rgba(232,240,252,.45);}
+    .rej-pill-good{background:rgba(93,227,150,.15);color:#5de396;}
+    .rej-pill-bad{background:rgba(248,113,113,.15);color:#f87171;}
+    .rej-pill-neutral{background:rgba(232,240,252,.08);color:rgba(232,240,252,.5);}
+    .deadline-alert{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.25);}
+    .deadline-alert-title{color:#f87171;}
+    .deadline-alert li{color:#f87171;}
+    .tracker-count{color:rgba(232,240,252,.45);}
+    .tracker-count b{color:#e8f0fc;}
+    .btn{background:#0d1829;border-color:rgba(232,240,252,.1);color:rgba(232,240,252,.65);}
+    .btn:hover{background:rgba(45,212,191,.06);border-color:#2dd4bf;color:#2dd4bf;}
+    .table-wrap{border-color:rgba(232,240,252,.08);}
+    thead th{background:#0b1423;color:rgba(232,240,252,.4);border-bottom-color:rgba(232,240,252,.08);}
+    tbody td{border-bottom-color:rgba(232,240,252,.05);}
+    tbody tr:hover{background:rgba(45,212,191,.03);}
+    tbody tr.row-pursuing td:first-child{border-left-color:#2dd4bf;}
+    tbody tr.row-submitted td:first-child{border-left-color:#7dd3fc;}
+    tbody tr.row-funded td:first-child{border-left-color:#5de396;}
+    .table-input{color:#e8f0fc;}
+    .table-input:hover{border-color:rgba(232,240,252,.15);background:rgba(255,255,255,.03);}
+    .table-input:focus{border-color:#2dd4bf;background:rgba(255,255,255,.05);outline:none;}
+    .delete-btn{border-color:rgba(248,113,113,.3);color:#f87171;}
+    .delete-btn:hover{background:rgba(248,113,113,.1);}
+    .empty-state{color:rgba(232,240,252,.4);}
+    .empty-state-title{color:rgba(232,240,252,.7);}
+    .empty-state i{color:rgba(45,212,191,.3);}
+    .proposal-panel{background:#0d1829;border-color:rgba(232,240,252,.08);}
+    .proposal-panel h2{color:#e8f0fc;}
+    .proposal-panel-desc{color:rgba(232,240,252,.45);}
+    .doc-item{border-bottom-color:rgba(232,240,252,.07);}
+    .prompt-preview{background:#08101e;border-color:rgba(232,240,252,.08);color:rgba(232,240,252,.6);}
+    .prompt-label{color:#2dd4bf;}
+    .field-label{color:#2dd4bf;}
+    .field-select{background:#08101e;border-color:rgba(232,240,252,.12);color:#e8f0fc;}
+    .field-select:focus{border-color:#2dd4bf;outline:none;}
+    .api-note{background:rgba(45,212,191,.07);border-color:rgba(45,212,191,.15);color:rgba(232,240,252,.6);}
+    .api-note a{color:#2dd4bf;}
+    .api-note code{background:rgba(45,212,191,.15);color:#2dd4bf;padding:1px 5px;border-radius:4px;}
+    .acc-item{background:#0d1829;border-color:rgba(232,240,252,.08);}
+    .acc-trigger{background:#0d1829;color:#e8f0fc;}
+    .acc-trigger:hover,.acc-trigger.acc-open{background:rgba(45,212,191,.05);}
+    .acc-trigger.acc-open{border-bottom-color:rgba(232,240,252,.08);}
+    .acc-num{background:#2dd4bf;color:#08101e;}
+    .acc-title{color:#e8f0fc;}
+    .acc-chev{color:rgba(232,240,252,.35);}
+    .acc-body{background:#0d1829;}
+    .settings-panel{background:#0d1829;border-color:rgba(232,240,252,.08);}
+    .settings-panel h2{color:#e8f0fc;}
+    .settings-panel-desc{color:rgba(232,240,252,.45);}
+    .api-key-input{background:#08101e;border-color:rgba(232,240,252,.12);color:#e8f0fc;}
+    .api-key-input:focus{border-color:#2dd4bf;outline:none;}
+    .save-key-btn{background:#2dd4bf;color:#08101e;font-weight:700;}
+    .save-key-btn:hover{background:#22b8a0;}
+    .key-status{background:rgba(93,227,150,.15);color:#5de396;}
+    .memory-stat{background:#08101e;border-color:rgba(232,240,252,.08);}
+    .memory-stat-n{color:#2dd4bf;}
+    .memory-stat-l{color:rgba(232,240,252,.4);}
+    .memory-btn{background:#0b1423;border-color:rgba(232,240,252,.1);color:rgba(232,240,252,.6);}
+    .memory-btn:hover{background:rgba(45,212,191,.06);border-color:#2dd4bf;}
+    .memory-btn-danger{color:#f87171;border-color:rgba(248,113,113,.25);}
+    .memory-btn-danger:hover{background:rgba(248,113,113,.08);}
+    .profile-input,.profile-textarea{background:#08101e;border-color:rgba(232,240,252,.12);color:#e8f0fc;}
+    .profile-input:focus,.profile-textarea:focus{border-color:#2dd4bf;outline:none;}
+    .save-profile-btn{background:#2dd4bf;color:#08101e;font-weight:700;}
+    .save-profile-btn:hover{background:#22b8a0;}
+    .app-footer{background:#060e1a;}
+    .app-footer-name{color:#e8f0fc;}
+    .app-footer-name span{color:#2dd4bf;}
+    .app-footer-links a{color:rgba(232,240,252,.35);}
+    .app-footer-links a:hover{color:#2dd4bf;}
+    .app-footer-badge{background:rgba(45,212,191,.1);color:#2dd4bf;border-color:rgba(45,212,191,.25);}
+    .landing-footer{background:#060e1a;}
+    .landing-footer-name{color:#e8f0fc;}
+    .landing-footer-name span{color:#2dd4bf;}
+    .landing-footer-links a{color:rgba(232,240,252,.35);}
+    .landing-footer-links a:hover{color:#2dd4bf;}
+    .landing-footer-badge{background:rgba(45,212,191,.1);color:#2dd4bf;border-color:rgba(45,212,191,.25);}
+    #toast{background:#0d1829;border:1px solid rgba(232,240,252,.1);color:#e8f0fc;}
+    a{color:#2dd4bf;}
+    a:hover{color:#22b8a0;}
+    /* ── 5A LAYOUT ── */
+    .app-hdr-stripe{display:none;}
+    .app-hdr-body{display:flex;align-items:center;padding:0 20px;gap:0;min-height:64px;}
+    .app-hdr-row{display:flex;align-items:center;gap:12px;margin-bottom:0;flex-shrink:0;padding:0;}
+    .app-hdr-row svg{flex-shrink:0;}
+    .app-tabs{display:flex;gap:0;border-bottom:none;margin-left:24px;flex:1;align-self:stretch;align-items:flex-end;}
+    .app-tab{padding:10px 16px;font-size:13px;font-weight:500;top:0;border-bottom:2px solid transparent;}
+    .app-tab.tab-active,.app-tab[aria-selected="true"]{color:#2dd4bf;border-bottom-color:#2dd4bf;}
+    .chip{padding:14px 18px;border-radius:10px;gap:14px;}
+    .chip-icon{width:32px;height:32px;border-radius:8px;flex-shrink:0;}
+    .chip-label{font-size:13.5px;}
+    .chip-desc{font-size:11.5px;}
+    .custom-search-row{flex-wrap:wrap;gap:8px;}
+    .custom-search-input-wrap{flex:0 0 100%;}
+    .run-btn{order:3;margin-left:auto;padding:10px 22px;flex-shrink:0;}
+    .opp-ctrl-btn[title="Reset selection"]{order:2;}
+    .char-counter{bottom:6px;}
+
+    input:focus,textarea:focus,select:focus{box-shadow:0 0 0 3px rgba(45,212,191,.15);}
+
+
+    /* ── 4A HERO SPLIT LAYOUT ── */
+    .hero-split{display:grid;grid-template-columns:1fr 1fr;min-height:520px;position:relative;overflow:hidden;}
+    .hero-left{padding:80px 52px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2;background:radial-gradient(ellipse 600px 500px at -10% 50%,rgba(45,212,191,.07) 0%,transparent 65%),#08101e;}
+    .hero-right{padding:60px 52px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2;background:linear-gradient(155deg,#0d1829 0%,#08101e 100%);border-left:1px solid rgba(232,240,252,.06);}
+    .hero-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,212,191,.25);border-radius:100px;padding:5px 16px 5px 10px;font-size:12px;color:rgba(45,212,191,.85);font-weight:500;margin-bottom:28px;width:fit-content;}
+    .hero-pill-dot{width:6px;height:6px;border-radius:50%;background:#2dd4bf;box-shadow:0 0 8px rgba(45,212,191,.6);flex-shrink:0;}
+    .hero-split-title{font-family:'DM Serif Display',serif;font-size:62px;line-height:1.06;font-weight:400;margin:0 0 22px;letter-spacing:-1px;color:#e8f0fc;}
+    .hero-split-title em{font-style:italic;color:#2dd4bf;}
+    .hero-split-sub{font-size:16px;line-height:1.7;color:rgba(232,240,252,.52);max-width:440px;margin:0 0 36px;font-weight:300;}
+    .hero-split-ctas{display:flex;gap:14px;align-items:center;}
+    .hero-ghost-btn{background:transparent;border:1.5px solid rgba(232,240,252,.18);color:rgba(232,240,252,.65);padding:13px 22px;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;}
+    .hero-results-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(232,240,252,.28);margin-bottom:16px;}
+    .hero-result-card{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:10px;background:rgba(232,240,252,.04);border:1px solid rgba(232,240,252,.07);margin-bottom:10px;}
+    .hero-result-hi{border-color:rgba(45,212,191,.22);background:rgba(45,212,191,.05);}
+    .hero-result-score{width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.18);color:#2dd4bf;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .hero-result-score-lo{background:rgba(232,240,252,.08);color:rgba(232,240,252,.45);}
+    .hero-result-body{flex:1;}
+    .hero-result-name{font-size:14px;font-weight:600;color:#e8f0fc;margin-bottom:3px;}
+    .hero-result-meta{font-size:12px;color:rgba(232,240,252,.38);}
+    .hero-result-amt{font-size:13px;font-weight:700;color:#2dd4bf;}
+    .hero-result-amt-lo{color:rgba(232,240,252,.45);}
+    /* how-step teal */
+    .how-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+    .how-step{background:rgba(232,240,252,.03);border:1px solid rgba(232,240,252,.07);border-radius:12px;padding:26px 22px;}
+    .how-step-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#22b8a0,#2dd4bf);color:#08101e;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+    .how-step-title{font-size:15px;font-weight:600;color:#e8f0fc;margin-bottom:6px;}
+    .how-step-desc{font-size:13px;color:rgba(232,240,252,.45);line-height:1.55;}
+    .how-step:not(:last-child)::after{display:none;}
+
   </style>
   <!-- Google Identity Services — Tier 1 sign-in gate (auth.js) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -353,19 +600,19 @@
 <div id="auth-gate" style="display:none;position:fixed;inset:0;z-index:9999;
      background:rgba(17,17,17,.55);backdrop-filter:blur(3px);
      align-items:center;justify-content:center;padding:16px;">
-  <div style="background:#fff;border-radius:16px;max-width:360px;width:100%;
-       padding:32px 28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);">
+  <div style="background:#1e1924;border-radius:16px;max-width:360px;width:100%;
+       padding:32px 28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7);border:1px solid rgba(240,236,228,.1);">
     <svg width="44" height="44" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin:0 auto 14px;display:block;">
-      <defs><linearGradient id="lg-gate" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+      <defs><linearGradient id="lg-gate" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22b8a0"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient></defs>
       <rect width="80" height="80" rx="18" fill="url(#lg-gate)"/>
       <circle cx="40" cy="40" r="6.5" fill="#fff"/><circle cx="40" cy="40" r="3" fill="url(#lg-gate)"/>
     </svg>
-    <div style="font-family:var(--font-display,inherit);font-weight:700;font-size:19px;color:#1F2937;margin-bottom:4px;">
+    <div style="font-family:var(--font-display,inherit);font-weight:700;font-size:19px;color:#f0ece4;margin-bottom:4px;">
       Sign in to Fundigo
     </div>
-    <p style="font-size:12.5px;color:#6B7280;line-height:1.6;margin:0 0 20px;">
+    <p style="font-size:12.5px;color:rgba(240,236,228,.55);line-height:1.6;margin:0 0 20px;">
       Use your Google or nonprofit Google Workspace account.
-      Nothing is uploaded — your grant data stays in this browser.
+      Nothing is uploaded. Your grant data stays in this browser.
     </p>
     <div id="google-signin-btn" style="display:flex;justify-content:center;min-height:44px;align-items:center;"></div>
   </div>
@@ -382,7 +629,7 @@
   <nav class="landing-nav">
     <a class="landing-nav-logo" href="#">
       <svg width="30" height="30" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs><linearGradient id="lg0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+        <defs><linearGradient id="lg0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22b8a0"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient></defs>
         <rect width="80" height="80" rx="18" fill="url(#lg0)"/>
         <line x1="40" y1="33" x2="40" y2="18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
         <line x1="40" y1="47" x2="40" y2="62" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
@@ -400,7 +647,7 @@
         <circle cx="11" cy="12" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="11" r="1.8" fill="#fff" opacity=".4"/>
         <circle cx="11" cy="68" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="69" r="1.8" fill="#fff" opacity=".4"/>
       </svg>
-      <div class="landing-nav-name">Fundi<span>go</span></div>
+      <div><div class="landing-nav-name">Fundi<span>go</span></div><div class="landing-nav-sub">AI-powered grant intelligence for nonprofits</div></div>
     </a>
     <div class="landing-nav-links">
       <a href="index.html">Home</a>
@@ -410,13 +657,39 @@
     </div>
   </nav>
 
-  <section class="hero" aria-label="Hero">
-    <canvas id="network-canvas" aria-hidden="true"></canvas>
-    <div class="hero-content">
-      <div class="hero-eyebrow"><i class="ti ti-sparkles" aria-hidden="true"></i> AI-powered · Verified leads · Human in control</div>
-      <h1 class="hero-title">Find the grants<br>your <b>mission deserves</b></h1>
-
-
+  <section class="hero hero-split" aria-label="Hero">
+    <canvas id="network-canvas" aria-hidden="true" style="opacity:.35;"></canvas>
+    <div class="hero-left">
+      <div class="hero-pill"><span class="hero-pill-dot"></span>AI-powered · Verified · Human in control</div>
+      <h1 class="hero-split-title">Find the grants your<br><em>mission deserves</em></h1>
+      <p class="hero-split-sub">A free 5-layer AI pipeline that discovers, verifies, and scores grant leads, so small nonprofits compete on equal footing.</p>
+      <div class="hero-split-ctas">
+        <button class="start-btn" onclick="enterApp()">Start for free →</button>
+        <button class="hero-ghost-btn" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-results-label">TOP RESULTS THIS RUN</div>
+      <div class="hero-result-card hero-result-hi">
+        <div class="hero-result-score">5</div>
+        <div class="hero-result-body"><div class="hero-result-name">Chicago Community Trust</div><div class="hero-result-meta">Education · Rolling deadline</div></div>
+        <div class="hero-result-amt">$25K</div>
+      </div>
+      <div class="hero-result-card hero-result-hi">
+        <div class="hero-result-score">5</div>
+        <div class="hero-result-body"><div class="hero-result-name">Polk Bros. Foundation</div><div class="hero-result-meta">After-school · Illinois</div></div>
+        <div class="hero-result-amt">$50K</div>
+      </div>
+      <div class="hero-result-card">
+        <div class="hero-result-score hero-result-score-lo">4</div>
+        <div class="hero-result-body"><div class="hero-result-name">Title I Federal Grants</div><div class="hero-result-meta">Government · K-12</div></div>
+        <div class="hero-result-amt hero-result-amt-lo">$100K+</div>
+      </div>
+      <div class="hero-result-card">
+        <div class="hero-result-score hero-result-score-lo">4</div>
+        <div class="hero-result-body"><div class="hero-result-name">Harris Family Foundation</div><div class="hero-result-meta">Private · Underserved youth</div></div>
+        <div class="hero-result-amt hero-result-amt-lo">$15K</div>
+      </div>
     </div>
   </section>
 
@@ -429,8 +702,9 @@
 
 
   <section class="how-section" id="how-it-works">
-    <h2 class="how-title">How it works</h2>
-    <p class="how-sub">From search to submitted proposal in five steps</p>
+    <span class="how-sec-label">How it works</span>
+    <h2 class="how-title">From search to proposal in five steps</h2>
+    <p class="how-sub">Select a category, let AI do the research, review only verified leads.</p>
     <div class="how-steps">
       <div class="how-step"><div class="how-step-num">1</div><div class="how-step-title">Choose category</div><div class="how-step-desc">Pick a funder type or type a custom search</div></div>
       <div class="how-step"><div class="how-step-num">2</div><div class="how-step-title">AI searches</div><div class="how-step-desc">5-layer pipeline runs automatically</div></div>
@@ -443,7 +717,7 @@
   <footer class="landing-footer">
     <div class="landing-footer-logo">
       <svg width="24" height="24" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs><linearGradient id="lg-footer" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+        <defs><linearGradient id="lg-footer" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22b8a0"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient></defs>
         <rect width="80" height="80" rx="18" fill="url(#lg-footer)"/>
         <line x1="40" y1="33" x2="40" y2="18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
         <line x1="40" y1="47" x2="40" y2="62" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
@@ -489,7 +763,7 @@
     <div class="app-hdr-body">
       <div class="app-hdr-row">
         <svg width="34" height="34" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-label="Fundigo" role="img">
-          <defs><linearGradient id="lg-app" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+          <defs><linearGradient id="lg-app" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22b8a0"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient></defs>
           <rect width="80" height="80" rx="18" fill="url(#lg-app)"/>
           <line x1="40" y1="33" x2="40" y2="18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
           <line x1="40" y1="47" x2="40" y2="62" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
@@ -507,17 +781,12 @@
           <circle cx="11" cy="12" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="11" r="1.8" fill="#fff" opacity=".4"/>
           <circle cx="11" cy="68" r="1.8" fill="#fff" opacity=".4"/><circle cx="69" cy="69" r="1.8" fill="#fff" opacity=".4"/>
         </svg>
-        <div style="flex:1;">
+        <div>
           <div class="app-hdr-title">Fundi<span>go</span></div>
           <div class="app-hdr-sub">AI-powered grant intelligence for nonprofits</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
-          <div id="auth-header-slot"></div>
-          <div class="app-hdr-badge">$0.00 / mo</div>
-          <a href="index.html" onclick="exitApp();return false;" style="font-size:10px;color:var(--c-muted);text-decoration:none;display:flex;align-items:center;gap:3px;" title="Back to home">
-            <i class="ti ti-arrow-left" style="font-size:10px;" aria-hidden="true"></i> Back to site
-          </a>
-        </div>
+        <div id="auth-header-slot" style="margin-left:auto;"></div>
+
       </div>
       <nav class="app-tabs" role="tablist" aria-label="App navigation">
         <button class="app-tab tab-active" role="tab" aria-selected="true"  onclick="switchTab('discover', this)">Discover</button>
@@ -546,32 +815,32 @@
 
         <div class="chip-grid" id="chip-grid">
           <div class="chip" data-category="community" onclick="selectChip(this)">
-            <div class="chip-icon" style="background:#E0F2FE;"><i class="ti ti-home" style="font-size:14px;color:#0369A1;" aria-hidden="true"></i></div>
+            <div class="chip-icon" style="background:linear-gradient(135deg,#3b82f6,#60a5fa);"><i class="ti ti-home" style="font-size:14px;color:transparent;" aria-hidden="true"></i></div>
             <div><span class="chip-label">Community foundations</span><span class="chip-desc">Local giving, rolling deadlines</span></div>
           </div>
           <div class="chip" data-category="corporate" onclick="selectChip(this)">
-            <div class="chip-icon" style="background:#FEF3C7;"><i class="ti ti-building" style="font-size:14px;color:#D97706;" aria-hidden="true"></i></div>
+            <div class="chip-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);"><i class="ti ti-building" style="font-size:14px;color:transparent;" aria-hidden="true"></i></div>
             <div><span class="chip-label">Corporate giving</span><span class="chip-desc">Unpublicized company programs</span></div>
           </div>
           <div class="chip" data-category="government" onclick="selectChip(this)">
-            <div class="chip-icon" style="background:#DCFCE7;"><i class="ti ti-landmark" style="font-size:14px;color:#166534;" aria-hidden="true"></i></div>
+            <div class="chip-icon" style="background:linear-gradient(135deg,#10b981,#34d399);"><i class="ti ti-landmark" style="font-size:14px;color:transparent;" aria-hidden="true"></i></div>
             <div><span class="chip-label">Government grants</span><span class="chip-desc">Federal, state, Title I</span></div>
           </div>
           <div class="chip" data-category="faith" onclick="selectChip(this)">
-            <div class="chip-icon" style="background:#FEE2E2;"><i class="ti ti-heart" style="font-size:14px;color:#991B1B;" aria-hidden="true"></i></div>
+            <div class="chip-icon" style="background:linear-gradient(135deg,#ef4444,#f87171);"><i class="ti ti-heart" style="font-size:14px;color:transparent;" aria-hidden="true"></i></div>
             <div><span class="chip-label">Faith-based funders</span><span class="chip-desc">Churches, dioceses, missions</span></div>
           </div>
           <div class="chip" data-category="family" onclick="selectChip(this)">
-            <div class="chip-icon" style="background:#F3E8FF;"><i class="ti ti-users" style="font-size:14px;color:#7C3AED;" aria-hidden="true"></i></div>
+            <div class="chip-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);"><i class="ti ti-users" style="font-size:14px;color:transparent;" aria-hidden="true"></i></div>
             <div><span class="chip-label">Family foundations</span><span class="chip-desc">Private, rarely publicized</span></div>
           </div>
           <div class="chip" data-category="healthcare" onclick="selectChip(this)">
-            <div class="chip-icon" style="background:#FEE2E2;"><i class="ti ti-heart-handshake" style="font-size:14px;color:#991B1B;" aria-hidden="true"></i></div>
+            <div class="chip-icon" style="background:linear-gradient(135deg,#f97316,#fb923c);"><i class="ti ti-heart-handshake" style="font-size:14px;color:transparent;" aria-hidden="true"></i></div>
             <div><span class="chip-label">Healthcare foundations</span><span class="chip-desc">Health equity, trauma-informed</span></div>
           </div>
           <div class="chip chip-full" data-category="all" onclick="selectChip(this)">
-            <div class="chip-icon" style="background:#EDE9FE;"><i class="ti ti-planet" style="font-size:14px;color:#7C3AED;" aria-hidden="true"></i></div>
-            <div><span class="chip-label" style="color:#5B21B6;">Grants for after school tutoring</span><span class="chip-desc">Illinois &amp; Texas · underserved K-12 students</span></div>
+            <div class="chip-icon" style="background:linear-gradient(135deg,#22b8a0,#2dd4bf);"><i class="ti ti-planet" style="font-size:14px;color:transparent;" aria-hidden="true"></i></div>
+            <div><span class="chip-label" style="color:#2dd4bf;">Grants for after school tutoring</span><span class="chip-desc">Illinois &amp; Texas · underserved K-12 students</span></div>
           </div>
         </div>
 
@@ -604,15 +873,15 @@
 
       <!-- Pipeline bar -->
       <div class="pipeline-bar" id="pipeline-bar" style="display:none;" aria-label="Pipeline progress">
-        <div class="pipeline-step" id="pipe-1"><i class="ti ti-search" style="font-size:9px;" aria-hidden="true"></i> 1 — Discover</div>
+        <div class="pipeline-step" id="pipe-1"><i class="ti ti-search" style="font-size:9px;" aria-hidden="true"></i> 1 &middot; Discover</div>
         <div class="pipeline-arrow" aria-hidden="true">→</div>
-        <div class="pipeline-step" id="pipe-15"><i class="ti ti-link" style="font-size:9px;" aria-hidden="true"></i> 1.5 — Verify</div>
+        <div class="pipeline-step" id="pipe-15"><i class="ti ti-link" style="font-size:9px;" aria-hidden="true"></i> 1.5 &middot; Verify</div>
         <div class="pipeline-arrow" aria-hidden="true">→</div>
-        <div class="pipeline-step" id="pipe-2"><i class="ti ti-star" style="font-size:9px;" aria-hidden="true"></i> 2 — Qualify</div>
+        <div class="pipeline-step" id="pipe-2"><i class="ti ti-star" style="font-size:9px;" aria-hidden="true"></i> 2 &middot; Qualify</div>
         <div class="pipeline-arrow" aria-hidden="true">→</div>
-        <div class="pipeline-step" id="pipe-25"><i class="ti ti-shield" style="font-size:9px;" aria-hidden="true"></i> 2.5 — Guard</div>
+        <div class="pipeline-step" id="pipe-25"><i class="ti ti-shield" style="font-size:9px;" aria-hidden="true"></i> 2.5 &middot; Guard</div>
         <div class="pipeline-arrow" aria-hidden="true">→</div>
-        <div class="pipeline-step" id="pipe-3"><i class="ti ti-table" style="font-size:9px;" aria-hidden="true"></i> 3 — Tracker</div>
+        <div class="pipeline-step" id="pipe-3"><i class="ti ti-table" style="font-size:9px;" aria-hidden="true"></i> 3 &middot; Tracker</div>
       </div>
 
       <!-- Summary stats -->
@@ -656,7 +925,7 @@
     ══════════════════════════════════════════ -->
     <div id="tab-tracker" class="tab-section" role="tabpanel">
 
-      <div class="deadline-alert" id="deadline-alert" style="display:none;" role="alert">
+      <div class="deadline-alert" id="deadline-alert-banner" style="display:none;" role="alert">
         <div class="deadline-alert-title"><i class="ti ti-alarm" style="font-size:12px;vertical-align:-1px;" aria-hidden="true"></i> <span id="deadline-alert-title-text"></span></div>
         <ul id="deadline-alert-list"></ul>
       </div>
@@ -670,7 +939,7 @@
       </div>
 
       <div class="tracker-toolbar">
-        <div class="tracker-count"><b id="tracker-row-count">0</b> opportunities tracked · sorted by deadline</div>
+        <div class="tracker-count" id="tracker-count"><b>0</b> opportunities tracked</div>
         <div class="btn-row">
           <button class="btn" onclick="addBlankTrackerRow()"><i class="ti ti-plus" style="font-size:11px;" aria-hidden="true"></i> Add manually</button>
           <button class="btn" onclick="exportTrackerToCSV()"><i class="ti ti-download" style="font-size:11px;" aria-hidden="true"></i> Export CSV</button>
@@ -706,12 +975,12 @@
     <div id="tab-proposal" class="tab-section" role="tabpanel">
 
       <div class="proposal-panel">
-        <h2>Step 1 — Set up your NotebookLM knowledge base</h2>
-        <p class="proposal-panel-desc">Do this once. Upload your org documents to NotebookLM. Every proposal draft draws from these — no invented facts.</p>
+        <h2>Step 1: Set up your NotebookLM knowledge base</h2>
+        <p class="proposal-panel-desc">Do this once. Upload your org documents to NotebookLM. Every proposal draft draws from these, no invented facts.</p>
         <ul class="doc-checklist">
           <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Mission, vision, and values statement</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Core context for every proposal</div></div></li>
           <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Program descriptions</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">What you do, in grant language</div></div></li>
-          <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Student outcome data and impact statistics</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Real numbers only — never invented</div></div></li>
+          <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Student outcome data and impact statistics</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Real numbers only, never invented</div></div></li>
           <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>IRS 501(c)(3) determination letter</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Required by nearly every funder</div></div></li>
           <li class="doc-item"><span class="doc-star" aria-hidden="true">★</span><div><b>Past funders list</b> <span class="pill pill-open" style="margin-left:5px;">Required</span><div style="font-size:10.5px;color:var(--c-muted);margin-top:1px;">Builds credibility with new funders</div></div></li>
           <li class="doc-item"><span style="color:var(--c-faint);" aria-hidden="true">○</span><div style="color:var(--c-muted);font-size:11.5px;">Budget overview · Student testimonials · Service areas <span style="font-size:10px;">(optional but recommended)</span></div></li>
@@ -724,11 +993,11 @@
       </div>
 
       <div class="proposal-panel">
-        <h2>Step 2 — Generate your proposal prompt</h2>
+        <h2>Step 2: Generate your proposal prompt</h2>
         <p class="proposal-panel-desc">Select an opportunity, copy the prompt, paste into NotebookLM alongside the funder's RFP.</p>
         <label class="field-label" for="proposal-opp-select">Select opportunity from tracker</label>
         <select id="proposal-opp-select" class="field-select" onchange="onProposalOppChange()">
-          <option value="">— Select an opportunity —</option>
+          <option value="">Select an opportunity</option>
           <option value="generic">📝 Generic template (no specific funder)</option>
         </select>
         <div id="proposal-prompt-wrap" style="display:none;">
@@ -747,14 +1016,14 @@
       </div>
 
       <div class="proposal-panel">
-        <h2>Step 3 — Draft, review, and submit</h2>
+        <h2>Step 3: Draft, review, and submit</h2>
         <p class="proposal-panel-desc">Follow these steps inside NotebookLM after pasting the prompt.</p>
         <div>
           <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">1</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Paste the funder's RFP into NotebookLM</div><div style="font-size:11.5px;color:var(--c-muted);">Upload grant guidelines as a new source document before prompting.</div></div></div>
           <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">2</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Paste the generated prompt into the chat</div><div style="font-size:11.5px;color:var(--c-muted);">NotebookLM drafts using only your uploaded org documents.</div></div></div>
-          <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">3</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Fill every [INSERT: ...] placeholder</div><div style="font-size:11.5px;color:var(--c-muted);">Never submit with unfilled placeholders — a funder will reject it.</div></div></div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">3</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Fill every [INSERT: ...] placeholder</div><div style="font-size:11.5px;color:var(--c-muted);">Never submit with unfilled placeholders, a funder will reject it.</div></div></div>
           <div style="display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--c-border);"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">4</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Human review and edit</div><div style="font-size:11.5px;color:var(--c-muted);">Check every statistic against your actual documents. Edit for your org's voice.</div></div></div>
-          <div style="display:flex;gap:12px;padding:10px 0;"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">5</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Internal approval and submit</div><div style="font-size:11.5px;color:var(--c-muted);">No application is submitted without human sign-off. AI assists — humans decide.</div></div></div>
+          <div style="display:flex;gap:12px;padding:10px 0;"><div style="width:28px;height:28px;border-radius:50%;background:var(--c-purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;" aria-hidden="true">5</div><div><div style="font-weight:600;font-size:12.5px;margin-bottom:2px;">Internal approval and submit</div><div style="font-size:11.5px;color:var(--c-muted);">No application is submitted without human sign-off. AI assists, humans decide.</div></div></div>
         </div>
       </div>
 
@@ -807,12 +1076,12 @@
         </button>
         <div class="acc-body">
           <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--c-border);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-muted);"><div>Model</div><div>Role &amp; function</div><div>Limit</div></div>
-          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">groq/compound</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 1 — Discover</span></div><div style="font-size:11px;color:var(--c-muted);">Live web search, up to 10 searches/call. Returns funders, amounts, deadlines, URLs. Memory excludes known funders.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">1K req/day</div></div></div>
-          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">groq/compound</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 1.5 — Verify</span></div><div style="font-size:11px;color:var(--c-muted);">Visits every URL server-side. Filters dead links, login walls, unverifiable pages silently.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">Same key</div></div></div>
-          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">gpt-oss-120b</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 2 — Qualify</span></div><div style="font-size:11px;color:var(--c-muted);">Scores 1–5 vs org profile. Mission, geography, eligibility, risks. Returns structured JSON with recommended action.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">1K req/day</div></div></div>
-          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">gpt-oss-safeguard</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 2.5 — Guard</span></div><div style="font-size:11px;color:var(--c-muted);">Language, bias, accuracy, appropriateness. Soft-flag only — AI never hard-blocks. Humans decide.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">Policy-driven</div></div></div>
-          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;align-items:start;"><div><div style="font-weight:600;font-size:12px;">Google NotebookLM</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 4 — Propose</span></div><div style="font-size:11px;color:var(--c-muted);">Drafts from real org documents only. No invented stats. Marks gaps [INSERT: ...]. Upload once, reuse forever.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">No API key</div></div></div>
-          <div style="margin-top:10px;background:var(--c-tint);border-radius:7px;padding:8px 10px;font-size:10.5px;color:var(--c-muted);">One Groq key covers all AI layers. Weekly run uses ~16,200 tokens — under 10% of the free daily limit. Resets every 24 hours.</div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">groq/compound</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 1 &middot; Discover</span></div><div style="font-size:11px;color:var(--c-muted);">Live web search, up to 10 searches/call. Returns funders, amounts, deadlines, URLs. Memory excludes known funders.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">1K req/day</div></div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">groq/compound</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 1.5 &middot; Verify</span></div><div style="font-size:11px;color:var(--c-muted);">Visits every URL server-side. Filters dead links, login walls, unverifiable pages silently.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">Same key</div></div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">gpt-oss-120b</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 2 &middot; Qualify</span></div><div style="font-size:11px;color:var(--c-muted);">Scores 1–5 vs org profile. Mission, geography, eligibility, risks. Returns structured JSON with recommended action.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">1K req/day</div></div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div><div style="font-weight:600;font-size:12px;">gpt-oss-safeguard</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 2.5 &middot; Guard</span></div><div style="font-size:11px;color:var(--c-muted);">Language, bias, accuracy, appropriateness. Soft-flag only, AI never hard-blocks. Humans decide.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">Policy-driven</div></div></div>
+          <div style="display:grid;grid-template-columns:180px 1fr 70px;gap:10px;padding:9px 0;align-items:start;"><div><div style="font-weight:600;font-size:12px;">Google NotebookLM</div><span style="display:inline-flex;background:var(--c-soft);color:var(--c-deep);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;">Layer 4 &middot; Propose</span></div><div style="font-size:11px;color:var(--c-muted);">Drafts from real org documents only. No invented stats. Marks gaps [INSERT: ...]. Upload once, reuse forever.</div><div><span style="background:#DCFCE7;color:#166534;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">Free</span><div style="font-size:9px;color:var(--c-faint);margin-top:3px;">No API key</div></div></div>
+          <div style="margin-top:10px;background:var(--c-tint);border-radius:7px;padding:8px 10px;font-size:10.5px;color:var(--c-muted);">One Groq key covers all AI layers. Weekly run uses ~16,200 tokens, under 10% of the free daily limit. Resets every 24 hours.</div>
         </div>
       </div>
 
@@ -829,7 +1098,7 @@
             <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-table" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">Tracker</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">Inline editable pipeline. Status changes auto-exclude funders from future searches. Deadline badges turn red within 14 days. CSV export for team sharing.</div></div>
             <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-file-text" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">Proposal</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">Select opportunity → copy generated prompt → paste into NotebookLM with funder's RFP. Drafts use only real org documents. Every gap marked [INSERT: ...].</div></div>
             <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-info-circle" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">About</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">This tab. Mission, AI models, tab guide, and architecture. Any team member or judge understands the full system in under 2 minutes.</div></div>
-            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;grid-column:1/-1;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-settings" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">Settings</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">Groq API key (session only — never saved permanently). Search memory — known funders excluded, dead URLs cached 60 days, domains cached 30 days. Org profile editor.</div></div>
+            <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:11px 13px;grid-column:1/-1;"><div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><div style="width:24px;height:24px;border-radius:6px;background:var(--c-soft);display:flex;align-items:center;justify-content:center;"><i class="ti ti-settings" style="font-size:12px;color:var(--c-purple);" aria-hidden="true"></i></div><b style="font-size:12px;">Settings</b></div><div style="font-size:10.5px;color:var(--c-muted);line-height:1.55;">Groq API key (session only, never saved permanently). Search memory: known funders excluded, dead URLs cached 60 days, domains cached 30 days. Org profile editor.</div></div>
           </div>
         </div>
       </div>
@@ -842,13 +1111,13 @@
           <i class="ti ti-chevron-down acc-chev" aria-hidden="true"></i>
         </button>
         <div class="acc-body">
-          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:var(--c-purple);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">1</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Discovery — groq/compound</div><div style="font-size:10.5px;color:var(--c-muted);">Live web search, 6 funder categories. Memory auto-excludes known funders.</div></div><span style="font-size:9px;font-weight:700;background:var(--c-soft);color:var(--c-deep);padding:2px 7px;border-radius:20px;white-space:nowrap;">Web search</span></div>
-          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">1.5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Link verification — visit_website</div><div style="font-size:10.5px;color:var(--c-muted);">Every URL visited server-side. Dead, login wall, unverifiable → silently dropped. Cached 60 days.</div></div><span style="font-size:9px;font-weight:700;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;white-space:nowrap;">Filters dead links</span></div>
-          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#D97706;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">2</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Qualification — gpt-oss-120b</div><div style="font-size:10.5px;color:var(--c-muted);">Fit score 1–5 vs org profile. Mission, geography, eligibility, risks. Below minimum → filtered out.</div></div><span style="font-size:9px;font-weight:700;background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;white-space:nowrap;">Fit score</span></div>
-          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#991B1B;color:#fff;font-size:7.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">2.5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Guard — gpt-oss-safeguard-20b</div><div style="font-size:10.5px;color:var(--c-muted);">Language, bias, accuracy, appropriateness. Soft-flag only — never hard-blocks.</div></div><span style="font-size:9px;font-weight:700;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;white-space:nowrap;">Guardrails</span></div>
-          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#166534;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">3</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Tracker — browser + memory</div><div style="font-size:10.5px;color:var(--c-muted);">Verified results land here. Status changes feed back to memory. CSV export.</div></div><span style="font-size:9px;font-weight:700;background:#DCFCE7;color:#166534;padding:2px 7px;border-radius:20px;white-space:nowrap;">Persistent</span></div>
-          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:var(--c-deep);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">4</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Proposal — NotebookLM</div><div style="font-size:10.5px;color:var(--c-muted);">Generated prompt + org docs → draft grounded in real data only.</div></div><span style="font-size:9px;font-weight:700;background:var(--c-soft);color:var(--c-deep);padding:2px 7px;border-radius:20px;white-space:nowrap;">Human-driven</span></div>
-          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#374151;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Human review — staff submits</div><div style="font-size:10.5px;color:var(--c-muted);">AI discovers and drafts. Humans decide and submit. Always.</div></div><span style="font-size:9px;font-weight:700;background:#DCFCE7;color:#166534;padding:2px 7px;border-radius:20px;white-space:nowrap;">Human in control</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:var(--c-purple);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">1</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Discovery &middot; groq/compound</div><div style="font-size:10.5px;color:var(--c-muted);">Live web search, 6 funder categories. Memory auto-excludes known funders.</div></div><span style="font-size:9px;font-weight:700;background:var(--c-soft);color:var(--c-deep);padding:2px 7px;border-radius:20px;white-space:nowrap;">Web search</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">1.5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Link verification &middot; visit_website</div><div style="font-size:10.5px;color:var(--c-muted);">Every URL visited server-side. Dead, login wall, unverifiable → silently dropped. Cached 60 days.</div></div><span style="font-size:9px;font-weight:700;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;white-space:nowrap;">Filters dead links</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#D97706;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">2</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Qualification &middot; gpt-oss-120b</div><div style="font-size:10.5px;color:var(--c-muted);">Fit score 1–5 vs org profile. Mission, geography, eligibility, risks. Below minimum → filtered out.</div></div><span style="font-size:9px;font-weight:700;background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;white-space:nowrap;">Fit score</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#991B1B;color:#fff;font-size:7.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">2.5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Guard &middot; gpt-oss-safeguard-20b</div><div style="font-size:10.5px;color:var(--c-muted);">Language, bias, accuracy, appropriateness. Soft-flag only, never hard-blocks.</div></div><span style="font-size:9px;font-weight:700;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;white-space:nowrap;">Guardrails</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#166534;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">3</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Tracker &middot; browser + memory</div><div style="font-size:10.5px;color:var(--c-muted);">Verified results land here. Status changes feed back to memory. CSV export.</div></div><span style="font-size:9px;font-weight:700;background:#DCFCE7;color:#166534;padding:2px 7px;border-radius:20px;white-space:nowrap;">Persistent</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:0.5px solid #F0EDF8;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:var(--c-deep);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">4</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Proposal &middot; NotebookLM</div><div style="font-size:10.5px;color:var(--c-muted);">Generated prompt + org docs → draft grounded in real data only.</div></div><span style="font-size:9px;font-weight:700;background:var(--c-soft);color:var(--c-deep);padding:2px 7px;border-radius:20px;white-space:nowrap;">Human-driven</span></div>
+          <div style="display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;align-items:start;"><div style="width:20px;height:20px;border-radius:50%;background:#374151;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;" aria-hidden="true">5</div><div><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin-bottom:1px;">Human review &middot; staff submits</div><div style="font-size:10.5px;color:var(--c-muted);">AI discovers and drafts. Humans decide and submit. Always.</div></div><span style="font-size:9px;font-weight:700;background:#DCFCE7;color:#166534;padding:2px 7px;border-radius:20px;white-space:nowrap;">Human in control</span></div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;">
             <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px;"><i class="ti ti-filter" style="font-size:16px;color:var(--c-purple);" aria-hidden="true"></i><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin:4px 0 3px;">5-layer pipeline</div><div style="font-size:10px;color:var(--c-muted);line-height:1.5;">Each layer filters noise. Only the best reach staff.</div></div>
             <div style="background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:8px;padding:10px;"><i class="ti ti-brain" style="font-size:16px;color:var(--c-purple);" aria-hidden="true"></i><div style="font-size:11.5px;font-weight:600;color:var(--c-text);margin:4px 0 3px;">Search memory</div><div style="font-size:10px;color:var(--c-muted);line-height:1.5;">Every run smarter. Known funders excluded automatically.</div></div>
@@ -869,13 +1138,14 @@
     <div id="tab-settings" class="tab-section" role="tabpanel">
 
       <div class="settings-panel">
-        <h2>Team data — org-owned Shared Drive</h2>
+        <h2>Team data: org-owned Shared Drive</h2>
         <p class="settings-panel-desc">
-          Grant data lives in a Google Sheet inside your org's Shared Drive —
-          not on Netlify, and not owned by any one person's account. If a
+          Grant data lives in a Google Sheet inside your org's Shared Drive,
+          not on any third-party server, and not owned by any one person's account. If a
           volunteer who's a team member leaves, removing them from the
           Shared Drive's membership is all that's needed; the data stays.
         </p>
+        <div id="org-sharing-note" style="font-size:11px;color:var(--c-muted);margin-bottom:8px;"></div>
 
         <div id="shared-drive-status" style="font-size:12px;margin-bottom:10px;"></div>
 
@@ -893,9 +1163,9 @@
           <b>One-time setup (founder/admin does this once):</b>
           1) In Google Drive, click <b>New → Shared Drive</b>, name it (e.g.
           "Fundigo Grant Data"), and add your grant team as members.
-          2) Open it — the URL looks like
+          2) Open it. The URL looks like
           <code style="background:var(--c-soft);color:var(--c-deep);padding:1px 5px;border-radius:4px;">drive.google.com/drive/folders/&lt;ID&gt;</code>
-          — copy the <code style="background:var(--c-soft);color:var(--c-deep);padding:1px 5px;border-radius:4px;">&lt;ID&gt;</code> part.
+          , copy the <code style="background:var(--c-soft);color:var(--c-deep);padding:1px 5px;border-radius:4px;">&lt;ID&gt;</code> part.
           3) Paste it above and click Save. The team spreadsheet is created
           inside it automatically the first time anyone loads data.
         </div>
@@ -903,7 +1173,7 @@
 
       <div class="settings-panel">
         <h2>Groq API key</h2>
-        <p class="settings-panel-desc">Stored in session memory only — cleared when you close this tab. Never saved to disk or sent anywhere except Groq's API.</p>
+        <p class="settings-panel-desc">Stored in session memory only, cleared when you close this tab. Never saved to disk or sent anywhere except Groq's API.</p>
         <div class="api-key-row">
           <div style="flex:1;">
             <label class="field-label" for="api-key-input">Groq API key</label>
@@ -912,7 +1182,7 @@
           <button class="save-key-btn" onclick="saveApiKey()" style="align-self:flex-end;">Save key</button>
           <span class="key-status" id="key-status" aria-live="polite">✓ Set</span>
         </div>
-        <div class="api-note">Get a free key at <a href="https://console.groq.com" target="_blank" rel="noopener" style="color:var(--c-purple);font-weight:600;">console.groq.com</a> — no credit card required. The key starts with <code style="background:var(--c-soft);color:var(--c-deep);padding:1px 5px;border-radius:4px;">gsk_</code>.</div>
+        <div class="api-note">Get a free key at <a href="https://console.groq.com" target="_blank" rel="noopener" style="color:var(--c-purple);font-weight:600;">console.groq.com</a>, no credit card required. The key starts with <code style="background:var(--c-soft);color:var(--c-deep);padding:1px 5px;border-radius:4px;">gsk_</code>.</div>
       </div>
 
       <div class="settings-panel">
@@ -955,7 +1225,7 @@
   <footer class="app-footer">
     <a class="app-footer-logo" href="index.html">
       <svg width="22" height="22" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs><linearGradient id="lg-af" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B2FBE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+        <defs><linearGradient id="lg-af" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22b8a0"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient></defs>
         <rect width="80" height="80" rx="18" fill="url(#lg-af)"/>
         <line x1="40" y1="33" x2="40" y2="18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
         <line x1="40" y1="47" x2="40" y2="62" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
@@ -1023,7 +1293,7 @@ async function saveSharedDriveId() {
     try { if (typeof initTracker === 'function') await initTracker(); } catch(e) {}
   } catch (err) {
     if (err.code === "NOT_AUTHORIZED") {
-      showToast(`Only ${err.configuredBy || "your org's admin"} can change this — ask them to update it.`);
+      showToast(`Only ${err.configuredBy || "your org's admin"} can change this, ask them to update it.`);
     } else {
       showToast("Could not save Shared Drive ID: " + err.message);
     }
@@ -1040,7 +1310,7 @@ async function refreshSharedDriveStatus() {
   const publicDomains = ["gmail.com","googlemail.com","yahoo.com","outlook.com",
     "hotmail.com","live.com","icloud.com","aol.com","protonmail.com"];
   if (publicDomains.includes(domain)) {
-    el.innerHTML = `<span style="color:var(--c-muted);">Personal account (${esc(user.email)}) — Shared Drives are for org domains only. Your data stays private to you.</span>`;
+    el.innerHTML = `<span style="color:var(--c-muted);">Personal account (${esc(user.email)}), Shared Drives are for org domains only. Your data stays private to you.</span>`;
     return;
   }
   try {
@@ -1048,12 +1318,12 @@ async function refreshSharedDriveStatus() {
     const isAdmin = !status.configuredBy || status.configuredBy === user.email;
 
     if (!status.sharedDriveId) {
-      el.innerHTML = `<span style="color:#B45309;">⚠️ Not configured yet — set it up below so your team shares one dataset.</span>`;
+      el.innerHTML = `<span style="color:#B45309;">⚠️ Not configured yet, set it up below so your team shares one dataset.</span>`;
     } else if (!status.spreadsheetId) {
-      el.innerHTML = `<span style="color:#166534;">✓ Shared Drive connected${status.configuredBy ? ` (set up by ${esc(status.configuredBy)})` : ""} — spreadsheet will be created on first use.</span>`;
+      el.innerHTML = `<span style="color:#166534;">✓ Shared Drive connected${status.configuredBy ? ` (set up by ${esc(status.configuredBy)})` : ""}, spreadsheet will be created on first use.</span>`;
     } else {
       const when = status.configuredAt ? new Date(status.configuredAt).toLocaleDateString() : "";
-      el.innerHTML = `<span style="color:#166534;">✓ Connected — your whole @${esc(domain)} team shares this data.${status.configuredBy ? ` Set up by ${esc(status.configuredBy)}${when ? ' on ' + when : ''}.` : ""}</span>`;
+      el.innerHTML = `<span style="color:#166534;">✓ Connected. Your whole @${esc(domain)} team shares this data.${status.configuredBy ? ` Set up by ${esc(status.configuredBy)}${when ? ' on ' + when : ''}.` : ""}</span>`;
     }
 
     // Only the admin (whoever configured it, or nobody yet) can edit.
@@ -1082,7 +1352,7 @@ async function openTeamSpreadsheetLink() {
     window.open(link, "_blank", "noopener");
   } catch (err) {
     if (err.code === "SHARED_DRIVE_NOT_CONFIGURED") {
-      showToast("Set up a Shared Drive first — see the box above.");
+      showToast("Set up a Shared Drive first, see the box above.");
     } else {
       showToast("Could not open spreadsheet: " + err.message);
     }
@@ -1119,10 +1389,60 @@ function switchTab(tabId, btn) {
   if (section) section.classList.add('tab-active');
   btn.classList.add('tab-active');
   btn.setAttribute('aria-selected', 'true');
-  if (tabId === 'tracker')  { renderTracker(); renderTrackerStats(); checkUpcomingDeadlines(); }
-  if (tabId === 'proposal') { renderProposalTab(); }
+  if (tabId === 'tracker')  { renderTracker(); updateTrackerStatsInline(); checkUpcomingDeadlines(); }
+  if (tabId === 'proposal') { populateProposalDropdown(); }
   if (tabId === 'settings') { updateMemoryStats(); loadProfileIntoSettings(); checkApiKeyStatus(); refreshSharedDriveStatus(); }
   window.scrollTo(0, 0);
+}
+
+// ── TRACKER STATS (writes into the existing 5-stat cards; does NOT
+//    call tracker.js's renderTrackerStats(), which would replace this
+//    panel's custom markup with its own generic 3-stat version) ──────
+function updateTrackerStatsInline() {
+  if (typeof getTrackerStats !== 'function') return;
+  const stats = getTrackerStats();
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('ts-total', stats.total);
+  set('ts-pursuing', stats.pursuing);
+  set('ts-submitted', stats.submitted);
+  set('ts-funded', stats.funded);
+  set('ts-pipeline', stats.totalPotential);
+}
+
+// ── PROPOSAL DROPDOWN (populates the opportunity <select> with real
+//    tracker rows; does NOT call proposal.js's renderProposalTab(),
+//    which would replace this whole tab's custom Step 1/2/3 markup
+//    with its own differently-styled version) ────────────────────────
+function populateProposalDropdown() {
+  const select = document.getElementById('proposal-opp-select');
+  if (!select || typeof trackerRows === 'undefined') return;
+
+  // Remove any previously-added optgroup so re-opening the tab
+  // doesn't duplicate options.
+  const existing = select.querySelector('optgroup[data-auto="1"]');
+  if (existing) existing.remove();
+
+  const pursuing = trackerRows
+    .filter(r => (typeof normaliseLegacyStatus === 'function' ? normaliseLegacyStatus(r.status) : r.status) === 'Pursue' || r.status === 'New')
+    .sort((a, b) => {
+      const da = new Date(a.deadline || '2999-01-01');
+      const db = new Date(b.deadline || '2999-01-01');
+      return da - db;
+    })
+    .slice(0, 10);
+
+  if (pursuing.length === 0) return;
+
+  const optgroup = document.createElement('optgroup');
+  optgroup.label = 'Pursuing / New';
+  optgroup.dataset.auto = '1';
+  pursuing.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r.id;
+    opt.textContent = r.funder + (r.program ? ', ' + r.program : '') + (r.deadline ? ' (due ' + r.deadline + ')' : '');
+    optgroup.appendChild(opt);
+  });
+  select.appendChild(optgroup);
 }
 
 // ── RESET SEARCH ─────────────────────────────────────────────
@@ -1249,7 +1569,7 @@ async function runPipeline() {
     }
 
     setPipe('pipe-1','running');
-    onStatus('Layer 1 — Searching the web for open grant opportunities…');
+    onStatus('Layer 1: Searching the web for open grant opportunities…');
     // Pass custom text if typed, otherwise use the selected chip category.
     // buildDiscoveryUserPrompt() prioritises customQuery over category.
     const searchOverride = { category: _selectedCategory || 'all', customQuery: customQ || '' };
@@ -1259,16 +1579,16 @@ async function runPipeline() {
     const discoveredFuture = discoveryResult.futureMonitoring || [];
     setPipe('pipe-1','done'); setPipe('pipe-15','running');
 
-    onStatus(`Layer 1.5 — Verifying ${discovered.length} URLs server-side…`);
+    onStatus(`Layer 1.5: Verifying ${discovered.length} URLs server-side…`);
     // Layer 1.5 — Skip live URL verification (visit_website drops valid URLs on free tier)
     // Mark all as NEEDS_CHECK — staff verifies before applying
     const verified = discovered.map(o => ({ ...o, linkStatus: 'NEEDS_CHECK' }));
     const linkResult = { verified, dropped: [], meta: { verified: verified.length, dropped: 0 } };
-    onStatus(`Layer 1.5 — ${verified.length} opportunit${verified.length !== 1 ? 'ies' : 'y'} passed for qualification…`);
+    onStatus(`Layer 1.5: ${verified.length} opportunit${verified.length !== 1 ? 'ies' : 'y'} passed for qualification…`);
     setPipe('pipe-15','done'); setPipe('pipe-2','running');
 
     // Wait 65 seconds between layers — TPM limit is 8,000/min shared across all models
-    onStatus('Layer 2 — Waiting 65 seconds for rate limit reset before qualifying…');
+    onStatus('Layer 2: Waiting 65 seconds for rate limit reset before qualifying…');
     await new Promise(r => setTimeout(r, 65000));
 
     // runQualification returns { qualified, filtered, meta }
@@ -1292,7 +1612,7 @@ async function runPipeline() {
     const top3 = guardResult.checked.slice(0, 3);
     if (top3.length > 0) {
       document.getElementById('top-recs-content').innerHTML = top3.map((o, i) =>
-        `<div class="top-rec-row">${i+1}. <b>${esc(o.funder)}</b> — ${esc(o.amount||'—')} · ${esc(o.deadline||'—')} · Fit ${o.fitScore||'—'}/5</div>`
+        `<div class="top-rec-row">${i+1}. <b>${esc(o.funder)}</b> · ${esc(o.amount||'—')} · ${esc(o.deadline||'—')} · Fit ${o.fitScore||'—'}/5</div>`
       ).join('');
       document.getElementById('top-recs').style.display = 'block';
     }
@@ -1302,7 +1622,7 @@ async function runPipeline() {
 
     if (guardResult.checked.length > 0) document.getElementById('opp-controls').style.display = 'flex';
     setPipe('pipe-3','done');
-    onStatus(`Done — ${guardResult.checked.length} verified opportunit${guardResult.checked.length !== 1 ? 'ies' : 'y'} found.`);
+    onStatus(`Done. ${guardResult.checked.length} verified opportunit${guardResult.checked.length !== 1 ? 'ies' : 'y'} found.`);
 
     // Collapse the search panel once results are in, regardless of
     // outcome — qualified matches or none. Replaces the earlier
@@ -1318,7 +1638,7 @@ async function runPipeline() {
       }
     } catch(e) {}
     try { if (typeof logRun === 'function') logRun({ category: _selectedCategory, found: discovered.length, verified: verified.length }); } catch(e) {}
-    showToast(`Search complete — ${guardResult.checked.length} opportunities found.`);
+    showToast(`Search complete. ${guardResult.checked.length} opportunities found.`);
 
   } catch (err) {
     onStatus('Error: ' + err.message);
@@ -1368,7 +1688,7 @@ function renderOpportunityCards(opportunities) {
         </div>
         <div class="opp-card-body">
           ${opp.whyQualifies ? `<div class="opp-why">${esc(opp.whyQualifies)}</div>` : ''}
-          ${isNeedsCheck ? `<div class="opp-guard-flag">⚠ URL not verified — the link below may redirect or return a 404. Visit the funder's homepage directly and search for this grant before applying.</div>` : ''}
+          ${isNeedsCheck ? `<div class="opp-guard-flag">⚠ URL not verified. The link below may redirect or return a 404. Visit the funder's homepage directly and search for this grant before applying.</div>` : ''}
           ${isFlagged && opp.guardNote ? `<div class="opp-guard-flag">⚠ ${esc(opp.guardNote)}</div>` : ''}
           <div class="opp-foot">
             ${opp.finalUrl||opp.url
@@ -1472,7 +1792,7 @@ function toggleFuture() {
 function saveApiKey() {
   const val = document.getElementById('api-key-input').value.trim();
   if (!val) { showToast('Enter a valid Groq API key first.'); return; }
-  if (!val.startsWith('gsk_')) { showToast('Groq keys start with gsk_ — double-check and try again.'); return; }
+  if (!val.startsWith('gsk_')) { showToast('Groq keys start with gsk_, double-check and try again.'); return; }
   // Use same key name as config.js: ere_key_groq
   sessionStorage.setItem('ere_key_groq', val);
   document.getElementById('key-status').classList.add('visible');
@@ -1560,19 +1880,93 @@ function setTextContent(id,val) { const el = document.getElementById(id); if (el
   if (!canvas) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = canvas.getContext('2d');
-  let nodes = [], W = 0, H = 0;
-  function resize() { const r = canvas.parentElement.getBoundingClientRect(); W = canvas.width = r.width||720; H = canvas.height = r.height||480; }
-  function initNodes() { nodes = []; for (let i=0;i<28;i++) nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:2+Math.random()*3}); }
+  const COUNT = 70, MAX = 160, SPIKES = 10;
+  let nodes = [], W = 0, H = 0, frame = 0;
+
+  function resize() {
+    const r = canvas.parentElement.getBoundingClientRect();
+    W = canvas.width = r.width || 900;
+    H = canvas.height = r.height || 500;
+  }
+
+  function initNodes() {
+    nodes = [];
+    for (let i = 0; i < COUNT; i++) {
+      nodes.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - .5) * .55, vy: (Math.random() - .5) * .55,
+        r: 1.5 + Math.random() * 2,
+        spike: i < SPIKES,
+        phase: Math.random() * Math.PI * 2,
+        speed: .018 + Math.random() * .018
+      });
+    }
+  }
+
+  function drawSpike(x, y, phase) {
+    const spokes = 8;
+    const outer = 10 + Math.sin(phase) * 5;
+    const inner = 4;
+    const alpha = .12 + .1 * Math.sin(phase);
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.beginPath();
+    for (let i = 0; i < spokes * 2; i++) {
+      const ang = (i * Math.PI) / spokes;
+      const rr = i % 2 === 0 ? outer : inner;
+      if (i === 0) ctx.moveTo(Math.cos(ang) * rr, Math.sin(ang) * rr);
+      else ctx.lineTo(Math.cos(ang) * rr, Math.sin(ang) * rr);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(45,212,191,' + alpha + ')';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(45,212,191,' + (.35 + .25 * Math.sin(phase)) + ')';
+    ctx.lineWidth = .7;
+    ctx.stroke();
+    ctx.restore();
+  }
+
   function draw() {
-    ctx.clearRect(0,0,W,H);
-    const MAX=130;
-    nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;});
-    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<MAX){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(124,58,237,${.18*(1-d/MAX)})`;ctx.lineWidth=.8;ctx.stroke();}}
-    nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(124,58,237,0.25)';ctx.fill();});
+    frame++;
+    ctx.clearRect(0, 0, W, H);
+    nodes.forEach(function(n) {
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < 0 || n.x > W) n.vx *= -1;
+      if (n.y < 0 || n.y > H) n.vy *= -1;
+      n.phase += n.speed;
+    });
+    // connections
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = i + 1; j < nodes.length; j++) {
+        var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < MAX) {
+          var a = (1 - d / MAX) * .32;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = 'rgba(45,212,191,' + a + ')';
+          ctx.lineWidth = .8;
+          ctx.stroke();
+        }
+      }
+    }
+    // nodes + spikes
+    nodes.forEach(function(n) {
+      var pulse = .5 + .5 * Math.sin(n.phase);
+      if (n.spike) drawSpike(n.x, n.y, n.phase);
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r * (n.spike ? 1 + pulse * .5 : 1), 0, Math.PI * 2);
+      ctx.fillStyle = n.spike
+        ? 'rgba(45,212,191,' + (.55 + pulse * .35) + ')'
+        : 'rgba(45,212,191,.22)';
+      ctx.fill();
+    });
     requestAnimationFrame(draw);
   }
+
   resize(); initNodes(); draw();
-  window.addEventListener('resize',()=>{resize();initNodes();});
+  window.addEventListener('resize', function() { resize(); initNodes(); });
 })();
 </script>
 
